@@ -1,0 +1,2 @@
+Clear cache and see the panels. 
+MENU button. Not aligned.
