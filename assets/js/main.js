@@ -212,19 +212,15 @@ const initPanelCut = () => {
 
   const updateCut = () => {
     const goldRect = goldTrack.getBoundingClientRect();
-    const inView =
-      goldRect.bottom >= 0 && goldRect.top <= window.innerHeight;
-    if (inView) {
-      const angle = getSkewYRadians(goldTrack);
-      const overlap = Math.max(24, Math.round(goldRect.height * 0.90));
-      const panelRect = panel.getBoundingClientRect();
-      const cutY = goldRect.top - panelRect.top;
-      const rise = Math.tan(angle) * panelRect.width;
+    const angle = getSkewYRadians(goldTrack);
+    const overlap = Math.max(24, Math.round(goldRect.height * 0.90));
+    const panelRect = panel.getBoundingClientRect();
+    const cutY = goldRect.top - panelRect.top;
+    const rise = Math.tan(angle) * panelRect.width;
 
-      panel.style.setProperty("--panel-cut-y", `${cutY}px`);
-      panel.style.setProperty("--panel-cut-rise", `${rise}px`);
-      panel.style.setProperty("--panel-cut-overlap", `${overlap}px`);
-    }
+    panel.style.setProperty("--panel-cut-y", `${cutY}px`);
+    panel.style.setProperty("--panel-cut-rise", `${rise}px`);
+    panel.style.setProperty("--panel-cut-overlap", `${overlap}px`);
     ticking = false;
   };
 

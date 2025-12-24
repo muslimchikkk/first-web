@@ -571,6 +571,7 @@ main {
 
 .ribbon-icon--fries {
   background-image: url("../img/Belt/fries.svg");
+  background-position: calc(100% + clamp(1px, 0.25vw, 4px)) center;
 }
 
 .ribbon-text {
@@ -688,8 +689,8 @@ main {
 
 .hero-steam {
   position: absolute;
-  top: clamp(-41px, -5.6vw, -25px);
-  left: clamp(210px, 23vw, 320px);
+  top: clamp(-54px, -7.2vw, -38px);
+  left: clamp(204px, 22.4vw, 310px);
   width: clamp(32px, 4.5vw, 54px);
   height: auto;
   pointer-events: none;
@@ -719,10 +720,12 @@ main {
 
 .rating-card {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   background: var(--white);
   border-radius: clamp(18px, 2.6vw, 24px);
-  padding: clamp(8px, 1.6vw, 12px) clamp(18px, 3vw, 28px) clamp(26px, 3.8vw, 34px);
+  padding: clamp(10px, 1.6vw, 14px) clamp(18px, 3vw, 28px) clamp(8px, 1.4vw, 14px);
   box-shadow: var(--shadow);
   opacity: 0;
   transform: translateY(8px);
@@ -740,7 +743,8 @@ main {
   font-family: "Oswald", sans-serif;
   font-size: clamp(20px, 2.6vw, 30px);
   text-transform: uppercase;
-  margin-bottom: clamp(8px, 1.2vw, 12px);
+  margin-bottom: clamp(6px, 1vw, 10px);
+  line-height: 1.2;
 }
 
 .rating-location {
