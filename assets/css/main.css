@@ -248,7 +248,7 @@ main {
 .nav-link {
   position: relative;
   padding: 2px clamp(4px, 0.8vw, 6px);
-  color: #2b2e2f;
+  color: var(--green);
   line-height: 1;
 }
 
@@ -295,7 +295,7 @@ main {
 .btn-label {
   position: relative;
   z-index: 4;
-  color: #2b2e2f;
+  color: var(--green);
   font-size: 0.90em;
 }
 
@@ -313,6 +313,21 @@ main {
   padding: clamp(6px, 0.9vw, 8px) clamp(32px, 4vw, 52px);
   background: transparent;
   box-shadow: none;
+}
+
+.btn-curvy-shadow {
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.16));
+}
+
+.curvy-badge {
+  --fill: #ee4928;            /* close to the image color */
+  width: min(900px, 90vw);
+  aspect-ratio: 1064 / 344;   /* keeps the shape proportions */
+  background: var(--fill);
+
+  /* Safari needs the -webkit- prefix */
+  -webkit-clip-path: path('M 0.0 171.5 L 13.0 164.5 L 31.0 151.5 L 47.5 136.0 L 58.5 123.0 L 67.5 112.0 L 72.5 101.0 L 86.5 71.0 L 97.5 51.0 L 106.5 38.0 L 110.5 32.0 L 135.0 12.5 L 149.0 6.5 L 164.0 1.5 L 174.0 1.5 L 175.0 0.5 L 252.5 0.0 L 828.5 0.0 L 895.0 0.5 L 896.0 1.5 L 902.0 1.5 L 921.0 7.5 L 936.0 14.5 L 958.0 30.5 L 967.0 40.5 L 971.0 47.5 L 988.0 76.5 L 997.0 94.5 L 1000.0 102.5 L 1005.0 113.5 L 1015.0 127.5 L 1028.0 141.5 L 1041.0 153.5 L 1058.0 165.5 L 1064.0 171.5 L 1042.0 186.5 L 1025.0 201.5 L 1015.0 212.5 L 1005.0 225.5 L 990.0 252.5 L 985.0 261.5 L 980.0 272.5 L 974.0 284.5 L 965.0 297.5 L 955.0 308.5 L 941.0 320.5 L 925.0 331.5 L 912.0 337.5 L 904.0 339.5 L 903.0 340.5 L 896.0 340.5 L 895.0 341.5 L 879.0 342.5 L 878.0 343.5 L 815.5 344.0 L 234.5 344.0 L 173.0 343.5 L 172.0 342.5 L 159.0 340.5 L 158.0 339.5 L 145.0 334.5 L 132.0 327.5 L 122.0 320.5 L 111.0 310.5 L 102.5 300.0 L 70.5 240.0 L 54.5 217.0 L 42.0 203.5 L 27.0 190.5 Z');
+  clip-path: path('M 0.0 171.5 L 13.0 164.5 L 31.0 151.5 L 47.5 136.0 L 58.5 123.0 L 67.5 112.0 L 72.5 101.0 L 86.5 71.0 L 97.5 51.0 L 106.5 38.0 L 110.5 32.0 L 135.0 12.5 L 149.0 6.5 L 164.0 1.5 L 174.0 1.5 L 175.0 0.5 L 252.5 0.0 L 828.5 0.0 L 895.0 0.5 L 896.0 1.5 L 902.0 1.5 L 921.0 7.5 L 936.0 14.5 L 958.0 30.5 L 967.0 40.5 L 971.0 47.5 L 988.0 76.5 L 997.0 94.5 L 1000.0 102.5 L 1005.0 113.5 L 1015.0 127.5 L 1028.0 141.5 L 1041.0 153.5 L 1058.0 165.5 L 1064.0 171.5 L 1042.0 186.5 L 1025.0 201.5 L 1015.0 212.5 L 1005.0 225.5 L 990.0 252.5 L 985.0 261.5 L 980.0 272.5 L 974.0 284.5 L 965.0 297.5 L 955.0 308.5 L 941.0 320.5 L 925.0 331.5 L 912.0 337.5 L 904.0 339.5 L 903.0 340.5 L 896.0 340.5 L 895.0 341.5 L 879.0 342.5 L 878.0 343.5 L 815.5 344.0 L 234.5 344.0 L 173.0 343.5 L 172.0 342.5 L 159.0 340.5 L 158.0 339.5 L 145.0 334.5 L 132.0 327.5 L 122.0 320.5 L 111.0 310.5 L 102.5 300.0 L 70.5 240.0 L 54.5 217.0 L 42.0 203.5 L 27.0 190.5 Z');
 }
 
 .btn-outline,
@@ -905,7 +920,7 @@ main {
 
 .section h2 {
   font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(28px, 4vw, 36px);
+  font-size: clamp(31px, 4.4vw, 40px);
   text-transform: uppercase;
   margin-bottom: clamp(8px, 1.6vw, 12px);
 }
@@ -943,13 +958,31 @@ main {
   margin-bottom: clamp(12px, 1.6vw, 16px);
 }
 
+.locations-banner__content input[type="search"] {
+  background-color: #ffffff;
+  color: var(--green);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f3a2f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: clamp(16px, 2vw, 20px) center;
+  background-size: clamp(16px, 2vw, 18px);
+  padding-left: clamp(44px, 5vw, 52px);
+}
+
+.locations-banner__content input[type="search"]::placeholder {
+  color: color-mix(in srgb, var(--green) 70%, transparent);
+}
+
+.locations-banner__content form {
+  transform: translateY(clamp(8px, 1.2vw, 14px));
+}
+
 .locations-banner__image img {
   display: block;
   width: clamp(120px, 24vw, 300px);
   height: auto;
   border-radius: clamp(10px, 2vw, 12px);
   object-fit: cover;
-  transform: translate(55%) scale(2);
+  transform: translate(55%, 8%) scale(2);
 }
 
 .locations-map iframe {
@@ -970,7 +1003,6 @@ main {
 @media (min-width: 900px) {
   .locations-grid {
     grid-template-columns: 1fr 1fr;
-    /* two columns on wider screens */
   }
 
   .locations-map iframe {
@@ -1014,10 +1046,9 @@ main {
   text-align: left !important;
 }
 
-/* Create four equal columns that sits next to each other */
 .column {
   flex: 33.3%;
-  padding: 0 4px;
+  padding: 0 10px;
 }
 
 .column img {
@@ -1026,7 +1057,6 @@ main {
 }
 
 .menu-item {
-  background: var(#f6f1e8);
   border-radius: clamp(12px, 2.4vw, 16px);
   box-shadow: var(--shadow);
   padding: clamp(12px, 1.8vw, 16px);
@@ -1038,7 +1068,6 @@ main {
   color: var(--muted);
 }
 
-/* Responsive layout - makes a two column-layout instead of four columns */
 @media screen and (max-width: 800px) {
   .column {
     flex: 50%;
@@ -1046,7 +1075,6 @@ main {
   }
 }
 
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
   .column {
     flex: 100%;
@@ -1073,7 +1101,6 @@ main {
 
 .footer-wave path {
   fill: #ffffff;
-  /* footer background color */
 }
 
 .footer-section h2 {
