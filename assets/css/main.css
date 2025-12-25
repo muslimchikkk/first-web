@@ -30,7 +30,8 @@ h4,
 h5,
 h6 {
   margin: 0;
-  color: inherit;
+  color: var(--green);
+  ;
 }
 
 p {
@@ -75,6 +76,7 @@ a {
 main {
   position: relative;
   z-index: 1;
+  padding: unset !important;
 }
 
 .page-panel {
@@ -679,6 +681,7 @@ main {
   line-height: 1.05;
   margin: 0;
   text-transform: uppercase;
+  color: var(--green);
 }
 
 .hero-heading {
@@ -748,6 +751,7 @@ main {
   margin-bottom: clamp(6px, 1vw, 10px);
   line-height: 1.2;
   text-align: center;
+  color: var(--green);
 }
 
 .rating-location {
@@ -1001,4 +1005,102 @@ main {
   .hero-visual {
     min-height: clamp(220px, 50vw, 320px);
   }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  text-align: left !important;
+}
+
+/* Create four equal columns that sits next to each other */
+.column {
+  flex: 33.3%;
+  padding: 0 4px;
+}
+
+.column img {
+  vertical-align: middle;
+  width: 100%;
+}
+
+.menu-item {
+  background: var(#f6f1e8);
+  border-radius: clamp(12px, 2.4vw, 16px);
+  box-shadow: var(--shadow);
+  padding: clamp(12px, 1.8vw, 16px);
+  margin-bottom: clamp(16px, 2.4vw, 24px);
+}
+
+.menu-description {
+  font-size: clamp(15px, 1.6vw, 18px);
+  color: var(--muted);
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+  .column {
+    flex: 50%;
+    max-width: 50%;
+  }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    flex: 100%;
+    max-width: 100%;
+  }
+}
+
+.footer-section {
+  color: var(--bg);
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.footer {
+  background: #0b2f25;
+}
+
+.footer-wave {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.footer-wave path {
+  fill: #ffffff;
+  /* footer background color */
+}
+
+.footer-section h2 {
+  color: var(--gold);
+}
+
+.footer-credit {
+  text-align: center;
+  padding: clamp(12px, 1.6vw, 16px) 0;
+  font-size: 0.90em;
+  color: var(--gold);
+  margin-top: 10cqh;
+}
+
+.social-logos {
+  gap: clamp(12px, 2vw, 16px);
+  padding: 10px 0;
+  color: var(--gold);
+  /* background-color: var(--bg-accent);
+  border-radius: clamp(12px, 2.4vw, 16px); */
+}
+
+.social-logo {
+  width: clamp(24px, 3.2vw, 36px);
+  height: clamp(24px, 3.2vw, 36px);
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: clamp(12px, 2vw, 16px);
 }
