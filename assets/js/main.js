@@ -181,6 +181,114 @@ const initHeroSlider = () => {
   }, 5000);
 };
 
+const initTestimonialsAvatars = () => {
+  const avatars = document.querySelectorAll(".testimonial-card .reviewer-avatar");
+  if (avatars.length === 0) {
+    return;
+  }
+
+  const rootStyle = getComputedStyle(document.documentElement);
+  const palette = [
+    "--avatar-1",
+    "--avatar-2",
+    "--avatar-3",
+    "--avatar-4",
+    "--avatar-5",
+    "--avatar-6",
+    "--avatar-7",
+    "--avatar-8",
+    "--avatar-9",
+    "--avatar-10",
+    "--avatar-11",
+    "--avatar-12",
+    "--avatar-13",
+    "--avatar-14",
+    "--avatar-15",
+  ]
+    .map((name) => rootStyle.getPropertyValue(name).trim())
+    .filter(Boolean);
+
+  const fallback = [
+    "#f59e0b",
+    "#22c55e",
+    "#3b82f6",
+    "#ef4444",
+    "#14b8a6",
+    "#f97316",
+    "#8b5cf6",
+    "#06b6d4",
+    "#ec4899",
+    "#84cc16",
+    "#fb7185",
+    "#6366f1",
+    "#a855f7",
+    "#0ea5e9",
+    "#eab308",
+  ];
+  const colors = palette.length ? palette : fallback;
+
+  avatars.forEach((avatar) => {
+    if (avatar.style.getPropertyValue("--avatar-color")) {
+      return;
+    }
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    avatar.style.setProperty("--avatar-color", color);
+  });
+};
+
+const initTestimonialsMarquee = () => {
+  const rows = document.querySelectorAll(".slider-row");
+  if (rows.length === 0) {
+    return;
+  }
+
+  const getRowGap = (row) => {
+    const styles = getComputedStyle(row);
+    const gapValue = styles.gap || styles.columnGap || "0";
+    const gap = parseFloat(gapValue);
+    return Number.isNaN(gap) ? 0 : gap;
+  };
+
+  const updateRow = (row) => {
+    if (!row.__baseNodes) {
+      row.__baseNodes = Array.from(row.children);
+    }
+    if (row.__baseNodes.length === 0) {
+      return;
+    }
+
+    const gap = getRowGap(row);
+    const baseWidth =
+      row.__baseNodes.reduce(
+        (sum, node) => sum + node.getBoundingClientRect().width,
+        0
+      ) +
+      gap * Math.max(0, row.__baseNodes.length - 1);
+
+    if (!baseWidth) {
+      return;
+    }
+
+    row.style.setProperty("--marquee-shift", `${baseWidth}px`);
+
+    const parentWidth = row.parentElement
+      ? row.parentElement.clientWidth
+      : window.innerWidth;
+    const targetWidth = parentWidth + baseWidth;
+
+    let safety = 0;
+    while (row.scrollWidth < targetWidth && safety < 20) {
+      row.__baseNodes.forEach((node) => {
+        row.appendChild(node.cloneNode(true));
+      });
+      safety += 1;
+    }
+  };
+
+  rows.forEach(updateRow);
+  window.addEventListener("resize", () => rows.forEach(updateRow));
+};
+
 const getSkewYRadians = (element) => {
   const transform = getComputedStyle(element).transform;
   if (!transform || transform === "none") {
@@ -259,4 +367,6 @@ Promise.all(includeJobs).then(() => {
   initBelts();
   initPanelCut();
   initHeroSlider();
+  initTestimonialsAvatars();
+  initTestimonialsMarquee();
 });
