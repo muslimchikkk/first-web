@@ -1119,6 +1119,12 @@ main {
   line-height: 0;
 }
 
+.footer-wave svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .footer-wave path {
   fill: var(--white);
 }

@@ -1,2 +1,25 @@
-Clear cache and see the panels. 
-MENU button. Not aligned.
+Awaiting:
+	- Google API
+	- Wording
+	- Tile - right panel
+
+
+
+
+Footer changes:
+	- add copyright
+	- add logo
+	- reduce the height
+	- move the opening hours to the second column
+	- add visible social links 
+	- add links to media logos
+	- reviews in italic. Try it
+	
+
+	- See if we could apply shadow to the footer
+
+
+	- Fix the alignment in Google review card from Hero section
+	- Remove 2 buttons from Hero section and replace them with delivery app logos
+
+	- Responsiveness
