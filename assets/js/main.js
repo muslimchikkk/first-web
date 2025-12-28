@@ -378,6 +378,7 @@ const initVideoSection = () => {
   const section = document.querySelector(".video-section");
   const video = document.querySelector(".bg-video");
   const overlay = document.querySelector(".video-overlay");
+  const stickyContainer = document.querySelector(".video-sticky");
 
   window.addEventListener("scroll", () => {
     const sectionTop = section.offsetTop;
@@ -399,6 +400,12 @@ const initVideoSection = () => {
     /* --- VIDEO EXPANSION --- */
     const width = 60 + progress * 40; // 60% -> 100%
     const height = 80 + progress * 20; // 80% -> 100%
+    console.log(width, height, "debug");
+    if (width === 100 && height === 100) {
+      stickyContainer.style.borderRadius = "unset";
+    } else {
+      stickyContainer.style.borderRadius = "clamp(8px, 1.4vw, 16px)";
+    }
 
     video.style.width = `${width}%`;
     video.style.height = `${height}%`;
