@@ -13,8 +13,6 @@ Footer changes:
 
 
 
-	- reviews in italic. Try it
-	
 
 	- See if we could apply shadow to the footer
 

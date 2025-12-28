@@ -120,6 +120,85 @@ const initRatingSlider = () => {
   setInterval(showNext, 4500);
 };
 
+const initRatingStars = () => {
+  const rows = document.querySelectorAll(".rating-row");
+  if (rows.length === 0) {
+    return;
+  }
+
+  const starPath = "assets/img/rating-stars";
+
+  const getPartialStar = (fraction) => {
+    if (fraction >= 1) {
+      return "star-10.svg";
+    }
+    if (fraction >= 0.8) {
+      return "star-08-09.svg";
+    }
+    if (fraction >= 0.7) {
+      return "star-07.svg";
+    }
+    if (fraction >= 0.6) {
+      return "star-06.svg";
+    }
+    if (fraction >= 0.5) {
+      return "star-05.svg";
+    }
+    if (fraction >= 0.4) {
+      return "star-04.svg";
+    }
+    if (fraction >= 0.3) {
+      return "star-03.svg";
+    }
+    if (fraction >= 0.1) {
+      return "star-01-02.svg";
+    }
+    return "star-00.svg";
+  };
+
+  const createStar = (fileName) => {
+    const img = document.createElement("img");
+    img.className = "rating-star";
+    img.src = `${starPath}/${fileName}`;
+    img.alt = "";
+    img.setAttribute("aria-hidden", "true");
+    return img;
+  };
+
+  rows.forEach((row) => {
+    const scoreEl = row.querySelector(".rating-score");
+    const starsEl = row.querySelector(".rating-stars");
+    if (!scoreEl || !starsEl) {
+      return;
+    }
+
+    const rating = parseFloat(scoreEl.textContent.replace(",", "."));
+    if (!Number.isFinite(rating)) {
+      return;
+    }
+
+    starsEl.innerHTML = "";
+    const fullCount = Math.floor(rating);
+    const fraction = Math.round((rating - fullCount) * 10) / 10;
+
+    const totalStars = 5;
+    for (let i = 0; i < Math.min(fullCount, totalStars); i += 1) {
+      starsEl.appendChild(createStar("star-10.svg"));
+    }
+
+    if (starsEl.children.length < totalStars) {
+      const partialStar = getPartialStar(fraction);
+      if (partialStar !== "star-00.svg") {
+        starsEl.appendChild(createStar(partialStar));
+      }
+    }
+
+    while (starsEl.children.length < totalStars) {
+      starsEl.appendChild(createStar("star-00.svg"));
+    }
+  });
+};
+
 const initBelts = () => {
   const marqBand = document.querySelector(".marquee-band");
   if (!marqBand) {
@@ -385,21 +464,14 @@ const initVideoSection = () => {
     const sectionHeight = section.offsetHeight;
     const scrollY = window.scrollY;
     const viewportHeight = window.innerHeight;
-
-    /*
-    Define expansion window:
-    - start when section top hits top of viewport
-    - end after user scrolls 1 viewport height
-  */
     const start = sectionTop;
     const end = sectionTop + viewportHeight;
 
     let progress = (scrollY - start) / (end - start);
     progress = Math.min(Math.max(progress, 0), 1);
 
-    /* --- VIDEO EXPANSION --- */
-    const width = 60 + progress * 40; // 60% -> 100%
-    const height = 80 + progress * 20; // 80% -> 100%
+    const width = 60 + progress * 40;
+    const height = 80 + progress * 20;
     console.log(width, height, "debug");
     if (width === 100 && height === 100) {
       stickyContainer.style.borderRadius = "unset";
@@ -410,7 +482,6 @@ const initVideoSection = () => {
     video.style.width = `${width}%`;
     video.style.height = `${height}%`;
 
-    /* --- OVERLAY FADE --- */
     overlay.style.opacity = Math.max(1 - progress * 1.5, 0);
   });
 };
@@ -418,6 +489,7 @@ const initVideoSection = () => {
 Promise.all(includeJobs).then(() => {
   initPanelWidthFromMenu();
   initPanelVerticalText();
+  initRatingStars();
   initRatingSlider();
   initBelts();
   initPanelCut();
