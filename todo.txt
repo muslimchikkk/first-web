@@ -7,12 +7,12 @@ Awaiting:
 
 
 Footer changes:
-	- add copyright
+
 	- add logo
-	- reduce the height
-	- move the opening hours to the second column
-	- add visible social links 
-	- add links to media logos
+
+
+
+
 	- reviews in italic. Try it
 	
 

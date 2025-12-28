@@ -5,8 +5,17 @@ if (header) {
     header.classList.toggle("is-scrolled", window.scrollY > 10);
   };
 
+  const setHeaderHeight = () => {
+    document.documentElement.style.setProperty(
+      "--header-height",
+      `${header.offsetHeight}px`
+    );
+  };
+
   toggleHeaderShadow();
+  setHeaderHeight();
   window.addEventListener("scroll", toggleHeaderShadow, { passive: true });
+  window.addEventListener("resize", setHeaderHeight);
 }
 
 const initPanelWidthFromMenu = () => {
@@ -388,11 +397,11 @@ const initVideoSection = () => {
     progress = Math.min(Math.max(progress, 0), 1);
 
     /* --- VIDEO EXPANSION --- */
-    const width = 60 + progress * 40; // 60% → 100%
-    const height = 80 + progress * 20; // 80vh → 100vh
+    const width = 60 + progress * 40; // 60% -> 100%
+    const height = 80 + progress * 20; // 80% -> 100%
 
     video.style.width = `${width}%`;
-    video.style.height = `${height}vh`;
+    video.style.height = `${height}%`;
 
     /* --- OVERLAY FADE --- */
     overlay.style.opacity = Math.max(1 - progress * 1.5, 0);

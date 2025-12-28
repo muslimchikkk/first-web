@@ -15,9 +15,9 @@
   --gold-cream: #fdf1cb;
   --card-border-color: #fdf1cb;
   --white: #ffffff;
-  --footer-bg: #0b2f25;
   --shadow: 0 20px 40px rgba(7, 39, 30, 0.12);
   --panel-right-width: min(30vw, 480px);
+  --header-height: 0px;
   --avatar-1: #f59e0b;
   --avatar-2: #22c55e;
   --avatar-3: #3b82f6;
@@ -1110,7 +1110,7 @@ main {
 }
 
 .footer {
-  background: var(--footer-bg);
+  background: var(--green-deep);
 }
 
 .footer-wave {
@@ -1243,8 +1243,9 @@ main {
 }
 
 .review-text {
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.2;
   color: var(--text-dark);
 }
 
@@ -1305,17 +1306,21 @@ main {
 
 .video-sticky {
   position: sticky;
-  top: 0;
-  height: 100vh;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
   overflow: hidden;
   display: grid;
-  place-items: center;
+  align-items: start;
+  justify-items: center;
+  border-radius: clamp(8px, 1.4vw, 16px);
 }
 
 .bg-video {
-  width: 60%;
-  max-height: 80vh;
+  width: 100%;
+  height: 100%;
+  max-height: none;
   object-fit: cover;
+  border-radius: inherit;
 }
 
 .video-overlay {
