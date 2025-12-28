@@ -1138,26 +1138,30 @@ main {
 }
 
 .footer-credit {
-  text-align: center;
-  padding: clamp(12px, 1.6vw, 16px) 0;
   font-size: 0.90em;
   color: var(--gold);
-  margin-top: 10cqh;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: var(--pico-typography-spacing-vertical);
 }
 
 .social-logos {
-  gap: clamp(12px, 2vw, 16px);
-  padding: 10px 0;
-  color: var(--gold);
+  display: grid;
+  grid-auto-flow: row;
+  justify-content: left;
 }
 
 .social-logo {
-  width: clamp(24px, 3.2vw, 36px);
-  height: clamp(24px, 3.2vw, 36px);
-  display: inline-block;
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: clamp(12px, 2vw, 16px);
+  display: grid;
+  grid-auto-flow: column;
+  gap: clamp(8px, 1.2vw, 12px);
+  justify-content: left;
+}
+
+.social-logo img {
+  height: 1em;
+  display: block;
+  align-self: anchor-center;
 }
 
 :root {
