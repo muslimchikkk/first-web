@@ -59,13 +59,16 @@ const initPanelVerticalText = () => {
 
   const updateText = () => {
     const panel = textEl.closest(".page-panel");
-    const panelHeight = panel ? panel.getBoundingClientRect().height : window.innerHeight;
+    const panelHeight = panel
+      ? panel.getBoundingClientRect().height
+      : window.innerHeight;
     const fontSize = parseFloat(getComputedStyle(textEl).fontSize) || 16;
     const approxUnit = fontSize * (word.length + 3);
     const count = Math.max(6, Math.ceil(panelHeight / approxUnit));
     textEl.innerHTML = Array.from({ length: count })
       .map((_, index) => {
-        const outlineClass = index % 2 === 1 ? " panel-vertical-text__word--outline" : "";
+        const outlineClass =
+          index % 2 === 1 ? " panel-vertical-text__word--outline" : "";
         return `<span class="panel-vertical-text__word${outlineClass}">${word}</span>`;
       })
       .join(" ");
@@ -182,7 +185,9 @@ const initHeroSlider = () => {
 };
 
 const initTestimonialsAvatars = () => {
-  const avatars = document.querySelectorAll(".testimonial-card .reviewer-avatar");
+  const avatars = document.querySelectorAll(
+    ".testimonial-card .reviewer-avatar"
+  );
   if (avatars.length === 0) {
     return;
   }
@@ -321,7 +326,7 @@ const initPanelCut = () => {
   const updateCut = () => {
     const goldRect = goldTrack.getBoundingClientRect();
     const angle = getSkewYRadians(goldTrack);
-    const overlap = Math.max(24, Math.round(goldRect.height * 0.90));
+    const overlap = Math.max(24, Math.round(goldRect.height * 0.9));
     const panelRect = panel.getBoundingClientRect();
     const cutY = goldRect.top - panelRect.top;
     const rise = Math.tan(angle) * panelRect.width;
@@ -360,6 +365,40 @@ const includeJobs = Array.from(includeTargets).map((target) => {
     });
 });
 
+const initVideoSection = () => {
+  const section = document.querySelector(".video-section");
+  const video = document.querySelector(".bg-video");
+  const overlay = document.querySelector(".video-overlay");
+
+  window.addEventListener("scroll", () => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+    const scrollY = window.scrollY;
+    const viewportHeight = window.innerHeight;
+
+    /*
+    Define expansion window:
+    - start when section top hits top of viewport
+    - end after user scrolls 1 viewport height
+  */
+    const start = sectionTop;
+    const end = sectionTop + viewportHeight;
+
+    let progress = (scrollY - start) / (end - start);
+    progress = Math.min(Math.max(progress, 0), 1);
+
+    /* --- VIDEO EXPANSION --- */
+    const width = 60 + progress * 40; // 60% → 100%
+    const height = 80 + progress * 20; // 80vh → 100vh
+
+    video.style.width = `${width}%`;
+    video.style.height = `${height}vh`;
+
+    /* --- OVERLAY FADE --- */
+    overlay.style.opacity = Math.max(1 - progress * 1.5, 0);
+  });
+};
+
 Promise.all(includeJobs).then(() => {
   initPanelWidthFromMenu();
   initPanelVerticalText();
@@ -369,4 +408,5 @@ Promise.all(includeJobs).then(() => {
   initHeroSlider();
   initTestimonialsAvatars();
   initTestimonialsMarquee();
+  initVideoSection();
 });

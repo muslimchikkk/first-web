@@ -1295,3 +1295,39 @@ main {
     transform: translateX(calc(-1 * var(--marquee-shift)));
   }
 }
+
+.video-section {
+  position: relative;
+  height: 350vh;
+  /* how long video stays pinned */
+  z-index: 1;
+}
+
+.video-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.bg-video {
+  width: 60%;
+  max-height: 80vh;
+  object-fit: cover;
+}
+
+.video-overlay {
+  position: absolute;
+  z-index: 2;
+  transition: opacity 0.2s linear;
+}
+
+#menu {
+  position: relative;
+  z-index: 2;
+  margin-top: -100vh;
+  /* THIS is the magic */
+  background: white;
+}
