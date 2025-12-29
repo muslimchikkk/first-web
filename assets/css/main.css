@@ -1110,13 +1110,31 @@ main {
   line-height: 0;
   background: var(--bg);
   margin-bottom: -1px;
+  position: relative;
+  aspect-ratio: 2000 / 380;
+  overflow: hidden;
+}
+
+.footer-shadow,
+.footer-cover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  display: block;
+}
+
+.footer-shadow {
+  z-index: 0;
 }
 
 .footer-cover {
-  display: block;
-  width: 100%;
-  height: auto;
-  background-color: var(--white);
+  z-index: 1;
 }
 
 .footer-section h2 {
