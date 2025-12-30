@@ -298,6 +298,12 @@ main {
   box-shadow: none;
 }
 
+.nav-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -1344,3 +1350,23 @@ main {
   /* THIS is the magic */
   background: white;
 }
+
+/* Extra Small Mobile (small phones) */
+@media (min-width: 320px) {}
+
+/* Small Mobile (portrait phones) */
+@media (min-width: 360px) {}
+
+
+
+/* Tablet Portrait */
+@media (min-width: 768px) {}
+
+/* Small Laptop/E-Reader */
+@media (min-width: 992px) {}
+
+/* Desktop */
+@media (min-width: 1024px) {}
+
+/* Large Desktop / Wide Screens */
+@media (min-width: 1440px) {}
