@@ -486,6 +486,16 @@ const initVideoSection = () => {
   });
 };
 
+function isMobile() {
+  const isSmallViewport = window.innerWidth <= 768;
+
+  const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  const isDevToolsEmulation = window.navigator.userAgentData?.mobile === true;
+
+  return isSmallViewport && (isMobileUA || isDevToolsEmulation);
+}
+
 Promise.all(includeJobs).then(() => {
   initPanelWidthFromMenu();
   initPanelVerticalText();
@@ -496,5 +506,5 @@ Promise.all(includeJobs).then(() => {
   initHeroSlider();
   initTestimonialsAvatars();
   initTestimonialsMarquee();
-  initVideoSection();
+  !isMobile() && initVideoSection(); // only initialize video section on non-mobile devices
 });

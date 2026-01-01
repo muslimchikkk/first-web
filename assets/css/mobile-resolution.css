@@ -1,8 +1,4 @@
 @media (max-width: 768px) {
-    .site-header {
-        background-color: var(--gold-cream);
-    }
-
     .header-inner {
         flex-direction: row;
         align-items: center;
@@ -29,7 +25,7 @@
         transform-origin: top;
         transition: transform 0.3s ease;
         margin: 0;
-        background-color: var(--gold-cream);
+        background-color: var(--gold-soft);
     }
 
     .nav-cta {
@@ -83,5 +79,68 @@
         stroke-width: 2;
         fill: none;
         transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .video-sticky {
+        height: auto;
+    }
+
+    .video-section {
+        height: auto;
+    }
+
+    .video-section video {
+        width: min(1200px, 92vw);
+        margin: 0 auto;
+    }
+
+    #menu {
+        margin-top: 0;
+    }
+
+    .footer {
+        padding-top: 2rem;
+    }
+
+    .footer .column {
+        padding: 0;
+    }
+
+    .footer .row {
+        gap: 2rem;
+    }
+
+    .locations-banner__content form {
+        transform: none;
+    }
+
+    .marquee-band {
+        overflow: hidden;
+    }
+
+    .marquee-track--dark {
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3)
+    }
+
+    .marquee-track--gold {
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3)
+    }
+
+    .hero {
+        padding: 0;
+    }
+
+    .hero-plate {
+        transform: none;
+        position: unset;
+    }
+
+    .hero-visual {
+        justify-self: center;
+    }
+
+    .footer-credit {
+        flex-direction: column;
+        row-gap: 1em;
     }
 }
