@@ -18,7 +18,6 @@
   --shadow: 0 20px 40px rgba(7, 39, 30, 0.12);
   --panel-right-width: min(30vw, 480px);
   --header-height: 0px;
-  --asset-root: "/first-web/assets";
   --avatar-1: #f59e0b;
   --avatar-2: #22c55e;
   --avatar-3: #3b82f6;
@@ -383,7 +382,7 @@ main {
 }
 
 .btn-outline {
-  background-image: url(var(--asset-root) /img/buttons/menu-btn.svg);
+  background-image: url("/first-web/assets/img/buttons/menu-btn.svg");
   z-index: 1;
 }
 
@@ -393,7 +392,7 @@ main {
 }
 
 .btn-outline--explore {
-  background-image: url(var(--asset-root) /img/buttons/explore-btn.svg);
+  background-image: url("/first-web/assets/img/buttons/explore-btn.svg");
 }
 
 .btn-explore .btn-label {
@@ -415,7 +414,7 @@ main {
 }
 
 .btn-hover {
-  background-image: url(var(--asset-root) /img/buttons/menu-btn-hover.svg);
+  background-image: url("/first-web/assets/img/buttons/menu-btn-hover.svg");
   z-index: 3;
   clip-path: inset(100% 0 0 0);
   transition: clip-path 0.65s ease;
@@ -644,15 +643,15 @@ main {
 }
 
 .ribbon-icon--pizza {
-  background-image: url(var(--asset-root) /img/belt/pizza-slice.svg);
+  background-image: url("/first-web/assets/img/belt/pizza-slice.svg");
 }
 
 .ribbon-icon--kebab {
-  background-image: url(var(--asset-root) /img/belt/kebab.svg);
+  background-image: url("/first-web/assets/img/belt/kebab.svg");
 }
 
 .ribbon-icon--fries {
-  background-image: url(var(--asset-root) /img/belt/fries.svg);
+  background-image: url("/first-web/assets/img/belt/fries.svg");
   background-position: calc(100% + clamp(1px, 0.25vw, 4px)) center;
 }
 
