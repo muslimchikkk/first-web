@@ -1,5 +1,13 @@
 const header = document.querySelector(".site-header");
 
+const setAssetRoot = () => {
+  const assetUrl = new URL("assets/", window.location.href);
+  const assetRoot = assetUrl.pathname.replace(/\/$/, "");
+  document.documentElement.style.setProperty("--asset-root", assetRoot);
+};
+
+setAssetRoot();
+
 if (header) {
   const toggleHeaderShadow = () => {
     header.classList.toggle("is-scrolled", window.scrollY > 10);
