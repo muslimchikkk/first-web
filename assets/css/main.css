@@ -6,7 +6,7 @@
   --green: #0f3a2f;
   --green-deep: #07281e;
   --red: #c43b2b;
-  --gold: #f2b233;
+  --gold: #fbb100;
   --gold-soft: #f2e7d2;
   --ink-strong: #2b2e2f;
   --ink-soft: #3b3b3b;
@@ -54,7 +54,7 @@ h4,
 h5,
 h6 {
   margin: 0;
-  color: var(--green);
+  color: var(--charcoal);
   ;
 }
 
@@ -141,10 +141,25 @@ main {
   background:
     linear-gradient(to right,
       transparent 0 calc(100% - var(--panel-right-width)),
-      var(--green-deep) calc(100% - var(--panel-right-width)) 100%),
+      var(--charcoal) calc(100% - var(--panel-right-width)) 100%),
     radial-gradient(circle at top left, var(--bg-accent), var(--bg));
+  background-repeat: no-repeat, no-repeat;
+  background-position: left top, left top;
+  background-size: 100% 100%, 100% 100%;
+}
+
+.page-panel--full .page-slicer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--panel-right-width);
+  height: 100%;
+  background-image: url("/first-web/assets/img/tile.png");
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-position: center;
+  background-size: cover;
+  pointer-events: none;
 }
 
 .panel-vertical-text {
@@ -279,7 +294,7 @@ main {
 .nav-link {
   position: relative;
   padding: 2px clamp(4px, 0.8vw, 6px);
-  color: var(--green);
+  color: var(--charcoal);
   line-height: 1;
 }
 
@@ -318,7 +333,7 @@ main {
 
 .btn-primary {
   background: var(--gold);
-  color: var(--green);
+  color: var(--charcoal);
   box-shadow: var(--shadow);
 }
 
@@ -332,7 +347,7 @@ main {
 .btn-label {
   position: relative;
   z-index: 4;
-  color: var(--green);
+  color: var(--charcoal);
   font-size: 0.90em;
 }
 
@@ -431,8 +446,8 @@ main {
 }
 
 .btn-ghost {
-  border-color: var(--green);
-  color: var(--green);
+  border-color: var(--charcoal);
+  color: var(--charcoal);
   background: transparent;
 }
 
@@ -749,7 +764,7 @@ main {
   line-height: 1.05;
   margin: 0;
   text-transform: uppercase;
-  color: var(--green);
+  color: var(--charcoal);
 }
 
 .hero-heading {
@@ -789,6 +804,29 @@ main {
   justify-content: center;
 }
 
+.hero-partners-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.2vw, 16px);
+}
+
+.hero-partners {
+  gap: clamp(14px, 2.6vw, 22px);
+  align-items: center;
+  margin-top: 0;
+}
+
+.hero-partners-text {
+  margin: 0;
+}
+
+.hero-partner-icon {
+  height: clamp(28px, 4.2vw, 44px);
+  width: auto;
+  display: block;
+}
+
 .hero-rating {
   max-width: min(540px, 92vw);
 }
@@ -824,7 +862,7 @@ main {
   margin-bottom: clamp(6px, 1vw, 10px);
   line-height: 1.2;
   text-align: center;
-  color: var(--green);
+  color: var(--charcoal);
 }
 
 .rating-location {
@@ -980,7 +1018,7 @@ main {
 
 .locations-banner__content input[type="search"] {
   background-color: var(--white);
-  color: var(--green);
+  color: var(--charcoal);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f3a2f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: clamp(16px, 2vw, 20px) center;
@@ -991,7 +1029,7 @@ main {
 }
 
 .locations-banner__content input[type="search"]::placeholder {
-  color: color-mix(in srgb, var(--green) 70%, transparent);
+  color: color-mix(in srgb, var(--charcoal) 70%, transparent);
 }
 
 .locations-banner__content form {
@@ -1108,7 +1146,7 @@ main {
 }
 
 .footer {
-  background: var(--green-deep);
+  background: var(--charcoal);
 }
 
 .footer-cover-wrap {
@@ -1180,7 +1218,7 @@ main {
   font-size: 2.6rem;
   font-weight: 700;
   margin-bottom: 12px;
-  color: var(--text-dark);
+  color: var(--charcoal);
 }
 
 .section-description {
@@ -1292,44 +1330,11 @@ main {
   }
 }
 
-.video-section {
-  position: relative;
-  height: 350vh;
-  /* how long video stays pinned */
-  z-index: 1;
-}
-
-.video-sticky {
-  position: sticky;
-  top: var(--header-height);
-  height: calc(100vh - var(--header-height));
-  overflow: hidden;
-  display: grid;
-  align-items: start;
-  justify-items: center;
-  border-radius: clamp(8px, 1.4vw, 16px);
-}
-
-.bg-video {
-  width: 100%;
-  height: 100%;
-  max-height: none;
-  object-fit: cover;
-  border-radius: inherit;
-}
-
-.video-overlay {
-  position: absolute;
-  z-index: 2;
-  transition: opacity 0.2s linear;
-}
-
 #menu {
   position: relative;
   z-index: 2;
-  margin-top: -100vh;
-  /* THIS is the magic */
-  background: white;
+  margin-top: 0;
+  background: transparent;
 }
 
 /* Extra Small Mobile (small phones) */

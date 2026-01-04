@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="assets/css/mobile-resolution.css" />
   </head>
   <body>
-    <header class="site-header" id="home">
+    <header class="site-header">
       <div class="container header-inner">
         <a class="logo" href="#home" aria-label="Don's Pizza & Kebab">
           <img
@@ -55,7 +55,7 @@
         <nav class="nav" aria-label="Primary">
           <a class="nav-link" href="#home">Home</a>
           <a class="nav-link" href="#locations">Locations</a>
-          <a class="nav-link" href="#testimonials">Testimonials</a>
+          <a class="nav-link" href="#reviews">Reviews</a>
           <a class="nav-link" href="#about">About us</a>
         </nav>
         <div class="header-cta">
@@ -82,7 +82,7 @@
     </div>
 
     <main>
-      <section class="hero">
+      <section class="hero" id="home">
         <div class="container hero-grid">
           <div class="hero-content">
             <div class="hero-heading">
@@ -152,44 +152,41 @@
                 </article>
               </div>
             </div>
-            <div class="hero-actions">
-              <a
-                class="btn btn-primary btn-pill btn-curvy btn-curvy-shadow btn-explore"
-                href="#menu"
+            <div class="hero-partners-block">
+              <p class="section-lede hero-partners-text">
+                Place an order on your preferred delivery platform.
+              </p>
+              <div
+                class="hero-actions hero-partners"
+                aria-label="Delivery partners"
               >
-                <span
-                  class="btn-outline btn-outline--explore"
-                  aria-hidden="true"
-                ></span>
-                <span class="btn-label">Explore Our Menu</span>
-              </a>
-              <a class="btn btn-ghost" href="#contact">Find a Location</a>
+                <img
+                  class="hero-partner-icon"
+                  src="assets/img/icons/foodora-logo.png"
+                  alt="Foodora"
+                />
+                <img
+                  class="hero-partner-icon"
+                  src="assets/img/icons/wolt-logo.svg"
+                  alt="Wolt"
+                />
+                <img
+                  class="hero-partner-icon"
+                  src="assets/img/icons/bolt-logo.webp"
+                  alt="Bolt Food"
+                />
+              </div>
             </div>
           </div>
           <div class="hero-visual" aria-hidden="true">
             <div class="hero-plate">
-              <div class="hero-slider">
-                <img
-                  class="hero-image is-active"
-                  src="assets/img/hero-bowl/bowl-1.png"
-                  alt=""
-                />
-                <img
-                  class="hero-image"
-                  src="assets/img/hero-bowl/bowl-2.png"
-                  alt=""
-                />
-                <img
-                  class="hero-image"
-                  src="assets/img/hero-bowl/bowl-3.png"
-                  alt=""
-                />
-                <img
-                  class="hero-image"
-                  src="assets/img/hero-bowl/bowl-4.png"
-                  alt=""
-                />
-              </div>
+                <div class="hero-slider">
+                  <img
+                    class="hero-image is-active"
+                    src="assets/img/hero-bowl/bowl-1.png"
+                    alt=""
+                  />
+                </div>
             </div>
           </div>
         </div>
@@ -197,7 +194,7 @@
 
       <div id="belt-section" data-include="partials/belt.html"></div>
 
-      <section class="features-section" id="features">
+      <section class="features-section">
         <div class="container">
           <div class="features-header">
             <div class="features-header-icon">
@@ -242,37 +239,6 @@
             </article>
           </div>
         </div>
-      </section>
-
-      <section class="video-section">
-        <div class="video-sticky">
-          <video
-            autoplay
-            muted
-            loop
-            playsinline
-            poster="..."
-            controls
-            class="bg-video"
-            poster="https://cdn.prod.website-files.com/6819bbf0db533a75162b577a%2F682d6c0fb07b124b857f335e_4783437_Afternoon%20Tea_Tea_1920x1080-poster-00001.jpg"
-          >
-            <source
-              src="https://cdn.prod.website-files.com/6819bbf0db533a75162b577a%2F682d6c0fb07b124b857f335e_4783437_Afternoon%20Tea_Tea_1920x1080-transcode.mp4"
-              type="video/mp4"
-            />
-            <source
-              src="https://cdn.prod.website-files.com/6819bbf0db533a75162b577a%2F682d6c0fb07b124b857f335e_4783437_Afternoon%20Tea_Tea_1920x1080-transcode.webm"
-              type="video/webm"
-            />
-          </video>
-
-          <!-- <div class="video-overlay">
-            <h1>Your headline</h1>
-            <p>This fades away on expansion</p>
-          </div> -->
-        </div>
-
-        <div class="scroll-spacer"></div>
       </section>
 
       <section class="section" id="menu">
@@ -345,9 +311,9 @@
         </div>
       </section>
 
-      <section class="section" id="testimonials">
+      <section class="section" id="reviews">
         <div
-          id="testimonials-section"
+          id="reviews-section"
           data-include="partials/testimonials.html"
         ></div>
       </section>

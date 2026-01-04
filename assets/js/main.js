@@ -260,7 +260,7 @@ const initBelts = () => {
 
 const initHeroSlider = () => {
   const images = document.querySelectorAll(".hero-image");
-  if (images.length === 0) {
+  if (images.length <= 1) {
     return;
   }
   let current = 0;
@@ -320,12 +320,33 @@ const initTestimonialsAvatars = () => {
   ];
   const colors = palette.length ? palette : fallback;
 
-  avatars.forEach((avatar) => {
-    if (avatar.style.getPropertyValue("--avatar-color")) {
-      return;
-    }
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    avatar.style.setProperty("--avatar-color", color);
+  const rows = document.querySelectorAll(".slider-row");
+  const groups = rows.length > 0 ? rows : [document];
+
+  groups.forEach((group) => {
+    let lastColor = "";
+    const rowAvatars =
+      group === document
+        ? avatars
+        : group.querySelectorAll(".reviewer-avatar");
+
+    rowAvatars.forEach((avatar) => {
+      const existingColor = avatar.style
+        .getPropertyValue("--avatar-color")
+        .trim();
+      if (existingColor) {
+        lastColor = existingColor;
+        return;
+      }
+
+      const options =
+        colors.length > 1
+          ? colors.filter((color) => color !== lastColor)
+          : colors;
+      const color = options[Math.floor(Math.random() * options.length)];
+      avatar.style.setProperty("--avatar-color", color);
+      lastColor = color;
+    });
   });
 };
 
@@ -453,49 +474,6 @@ const includeJobs = Array.from(includeTargets).map((target) => {
     });
 });
 
-const initVideoSection = () => {
-  const section = document.querySelector(".video-section");
-  const video = document.querySelector(".bg-video");
-  const overlay = document.querySelector(".video-overlay");
-  const stickyContainer = document.querySelector(".video-sticky");
-
-  window.addEventListener("scroll", () => {
-    const sectionTop = section.offsetTop;
-    const sectionHeight = section.offsetHeight;
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const start = sectionTop;
-    const end = sectionTop + viewportHeight;
-
-    let progress = (scrollY - start) / (end - start);
-    progress = Math.min(Math.max(progress, 0), 1);
-
-    const width = 60 + progress * 40;
-    const height = 80 + progress * 20;
-    console.log(width, height, "debug");
-    if (width === 100 && height === 100) {
-      stickyContainer.style.borderRadius = "unset";
-    } else {
-      stickyContainer.style.borderRadius = "clamp(8px, 1.4vw, 16px)";
-    }
-
-    video.style.width = `${width}%`;
-    video.style.height = `${height}%`;
-
-    overlay.style.opacity = Math.max(1 - progress * 1.5, 0);
-  });
-};
-
-function isMobile() {
-  const isSmallViewport = window.innerWidth <= 768;
-
-  const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  const isDevToolsEmulation = window.navigator.userAgentData?.mobile === true;
-
-  return isSmallViewport && (isMobileUA || isDevToolsEmulation);
-}
-
 Promise.all(includeJobs).then(() => {
   initPanelWidthFromMenu();
   initPanelVerticalText();
@@ -506,5 +484,4 @@ Promise.all(includeJobs).then(() => {
   initHeroSlider();
   initTestimonialsAvatars();
   initTestimonialsMarquee();
-  !isMobile() && initVideoSection(); // only initialize video section on non-mobile devices
 });
