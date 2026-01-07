@@ -233,13 +233,14 @@ const initBelts = () => {
   };
 
   const updateBelt = () => {
+    const beltSpeed = 0.81;
     document.documentElement.style.setProperty(
       "--belt-dark",
-      `${-(latestScroll * 0.9)}px`
+      `${-(latestScroll * beltSpeed)}px`
     );
     document.documentElement.style.setProperty(
       "--belt-gold",
-      `${latestScroll * 0.9}px`
+      `${latestScroll * beltSpeed}px`
     );
     ticking = false;
   };

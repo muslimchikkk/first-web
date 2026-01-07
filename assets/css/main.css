@@ -767,6 +767,11 @@ main {
   color: var(--charcoal);
 }
 
+.hero-title-line {
+  display: block;
+  font-size: 0.7em;
+}
+
 .hero-heading {
   position: relative;
   display: inline-block;
