@@ -673,6 +673,14 @@ main {
   background-image: url("/first-web/assets/img/icons/standard.png");
 }
 
+.ribbon-icon--souce {
+  background-image: url("/first-web/assets/img/icons/souce.png");
+}
+
+.ribbon-icon--bread {
+  background-image: url("/first-web/assets/img/icons/bread-roll.png");
+}
+
 .ribbon-icon--kebab {
   background-image: url("/first-web/assets/img/belt/kebab.svg");
 }
