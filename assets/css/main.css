@@ -666,6 +666,26 @@ main {
   background-image: url("/first-web/assets/img/belt/pizza-slice.svg");
 }
 
+.ribbon-icon--delivery {
+  background-image: url("/first-web/assets/img/icons/fast-delivery.png");
+}
+
+.ribbon-icon--seasons {
+  background-image: url("/first-web/assets/img/icons/seasons.png");
+}
+
+.ribbon-icon--standard {
+  background-image: url("/first-web/assets/img/icons/standard.png");
+}
+
+.ribbon-icon--souce {
+  background-image: url("/first-web/assets/img/icons/souce.png");
+}
+
+.ribbon-icon--bread {
+  background-image: url("/first-web/assets/img/icons/bread-roll.png");
+}
+
 .ribbon-icon--kebab {
   background-image: url("/first-web/assets/img/belt/kebab.svg");
 }
