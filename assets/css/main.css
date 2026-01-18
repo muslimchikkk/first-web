@@ -156,6 +156,11 @@ main {
   width: var(--panel-right-width);
   height: 100%;
   background-image: url("/first-web/assets/img/tile.png");
+  background-image: image-set(
+    url("/first-web/assets/img/tile.avif") type("image/avif"),
+    url("/first-web/assets/img/tile.webp") type("image/webp"),
+    url("/first-web/assets/img/tile.png") type("image/png")
+  );
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

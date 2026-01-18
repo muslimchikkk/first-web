@@ -234,13 +234,27 @@
           </div>
           <div class="hero-visual" aria-hidden="true">
             <div class="hero-plate">
-              <div class="hero-slider">
-                <img
-                  class="hero-image is-active"
-                  src="assets/img/hero-bowl/bowl-1.png"
-                  alt=""
-                />
-              </div>
+                <div class="hero-slider">
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcset="assets/img/hero-bowl/bowl-1.avif 1x, assets/img/hero-bowl/bowl-1@2x.avif 2x"
+                    />
+                    <source
+                      type="image/webp"
+                      srcset="assets/img/hero-bowl/bowl-1.webp 1x, assets/img/hero-bowl/bowl-1@2x.webp 2x"
+                    />
+                    <img
+                      class="hero-image is-active"
+                      src="assets/img/hero-bowl/bowl-1.png"
+                      alt=""
+                      width="4000"
+                      height="4000"
+                      decoding="async"
+                      fetchpriority="high"
+                    />
+                  </picture>
+                </div>
             </div>
           </div>
         </div>
@@ -267,8 +281,7 @@
               </div>
               <h3>GEMÜSE DÖNER KEBAB</h3>
               <p>
-                Berlin-style Döner with quality meat, fresh ingredients, 
-                signature sauces and sautéed veg. Nothing without a reason.
+                Berlin-style döner: quality meat, signature sauces and sautéed veg.
               </p>
             </article>
             <article class="feature-card card">
@@ -276,8 +289,7 @@
                 <img src="assets/img/belt/kebab.svg" alt="" />
               </div>
               <h3>NO CABBAGE. NO EXCUSES</h3>
-              <p>Most kebabs are stuffed with cheap cabbage to cut costs and fill space.
-                 We don't use any, because it was never meant to be there.</p>
+              <p>Most kebabs add cabbage to bulk up. We use none. It doesn't belong there.</p>
             </article>
             <article class="feature-card card">
               <div class="feature-icon">
@@ -291,8 +303,7 @@
                 <img src="assets/img/belt/pizza-slice.svg" alt="" />
               </div>
               <h3>FRANCHISE (YES, REALLY)</h3>
-              <p>Our franchise model is just as different as our food.
-                 A never-heard-of 1% royalty fee, built for partners who want to grow.</p>
+              <p>A franchise model as bold as our food: 1% royalty, made to grow.</p>
             </article>
           </div>
         </div>
@@ -347,10 +358,24 @@
                 </form>
               </div>
               <div class="locations-banner__image" aria-hidden="true">
-                <img
-                  src="assets/img/pizza-man.png"
-                  alt="Man eating a slice of pizza"
-                />
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcset="assets/img/pizza-man.avif"
+                  />
+                  <source
+                    type="image/webp"
+                    srcset="assets/img/pizza-man.webp"
+                  />
+                  <img
+                    src="assets/img/pizza-man.png"
+                    alt="Man eating a slice of pizza"
+                    width="3237"
+                    height="3237"
+                    decoding="async"
+                    loading="lazy"
+                  />
+                </picture>
               </div>
             </div>
 
