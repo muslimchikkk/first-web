@@ -51,7 +51,6 @@ h5,
 h6{
   margin: 0;
   color: var(--charcoal);
-  ;
 }
 
 p{
@@ -87,13 +86,13 @@ a{
   text-decoration: none;
 }
 
-/* Layout container: center content and cap width */
+/* Layout container for section widths */
 .container{
   width: min(1200px, 92vw);
   margin: 0 auto;
 }
 
-/* Base card: shared surface styling */
+/* Reusable card surface with border/shadow */
 .card{
   background: var(--card-bg, var(--white));
   border-radius: var(--card-radius, clamp(12px, 2.4vw, 16px));
@@ -107,7 +106,7 @@ main{
   padding: unset !important;
 }
 
-/* Fixed background panel system (left/right split + overlays) */
+/* Fixed background panels for hero split */
 .page-panel{
   position: fixed;
   inset: 0;
@@ -120,6 +119,7 @@ main{
   z-index: 0;
 }
 
+/* Panel splitter wrapper */
 .page-panel .page-slicer{
   position: absolute;
   inset: 0;
@@ -135,6 +135,7 @@ main{
       calc(0% - var(--panel-cut-bleed)) 0);
 }
 
+/* Right panel background layer */
 .page-panel--full .page-slicer{
   background:
     linear-gradient(to right,
@@ -146,6 +147,7 @@ main{
   background-size: 100% 100%, 100% 100%;
 }
 
+/* Right panel texture overlay */
 .page-panel--full .page-slicer::after{
   content: "";
   position: absolute;
@@ -165,6 +167,7 @@ main{
   pointer-events: none;
 }
 
+/* Vertical branding stack on the right panel */
 .panel-vertical-text{
   position: absolute;
   top: 0;
@@ -176,6 +179,7 @@ main{
   z-index: 1;
 }
 
+/* Vertical text column sizing and font */
 .panel-vertical-text__content{
   position: absolute;
   top: 0;
@@ -195,12 +199,20 @@ main{
   white-space: nowrap;
 }
 
-.panel-vertical-text__word 
+/* Individual vertical word styling */
+.panel-vertical-text__word{
+  display: inline-block;
+  padding-inline: clamp(4px, 0.6vw, 8px);
+}
 
-.panel-vertical-text__word--outline 
+/* Outline variant for alternating words */
+.panel-vertical-text__word--outline{
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--bg) 65%, transparent);
+}
 
 /* Sticky site header bar */
-.site-header .site-header{
+.site-header{
   position: sticky;
   top: 0;
   background: transparent;
@@ -244,6 +256,7 @@ main{
   opacity: 1;
 }
 
+/* Header layout: logo, nav, CTA */
 .header-inner{
   position: relative;
   display: flex;
@@ -253,6 +266,7 @@ main{
   padding: clamp(10px, 1.0vw, 16px) 0;
 }
 
+/* Header logo wrapper */
 .logo{
   display: flex;
   align-items: center;
@@ -272,6 +286,7 @@ main{
   transform-origin: left center;
 }
 
+/* Primary navigation list */
 .nav{
   display: flex;
   justify-content: flex-start;
@@ -288,6 +303,7 @@ main{
   font-size: 0.90em;
 }
 
+/* Navigation link styling */
 .nav-link{
   position: relative;
   padding: 2px clamp(4px, 0.8vw, 6px);
@@ -295,6 +311,7 @@ main{
   line-height: 1;
 }
 
+/* Header call-to-action container */
 .header-cta{
   position: static;
   transform: none;
@@ -316,6 +333,7 @@ main{
   pointer-events: none;
 }
 
+/* Base button styling */
 .btn{
   display: inline-flex;
   align-items: center;
@@ -328,12 +346,14 @@ main{
   border: 2px solid transparent;
 }
 
+/* Primary button theme */
 .btn-primary{
   background: var(--gold);
   color: var(--charcoal);
   box-shadow: var(--shadow);
 }
 
+/* Button with hover mask animation */
 .btn-animated{
   position: relative;
   overflow: hidden;
@@ -341,6 +361,7 @@ main{
   transition: color 0.3s ease;
 }
 
+/* Button text label */
 .btn-label{
   position: relative;
   z-index: 4;
@@ -353,10 +374,12 @@ main{
   color: var(--white);
 }
 
+/* Pill button sizing */
 .btn-pill{
   padding: clamp(10px, 1.4vw, 12px) clamp(18px, 2.8vw, 28px);
 }
 
+/* Curvy badge button mask */
 .btn-curvy{
   border-radius: clamp(14px, 2vw, 18px);
   padding: clamp(6px, 0.9vw, 8px) clamp(32px, 4vw, 52px);
@@ -364,14 +387,9 @@ main{
   box-shadow: none;
 }
 
-.btn-curvy-shadow 
-
-.curvy-badge 
-
 .btn-outline,
 .btn-fill,
-.btn-hover .btn-outline,
-.btn-fill,
+/* Hover overlay layer for curvy button */
 .btn-hover{
   position: absolute;
   inset: 0;
@@ -382,25 +400,14 @@ main{
   pointer-events: none;
 }
 
+/* Curvy button outline layer */
 .btn-outline{
   background-image: url("/first-web/assets/img/buttons/menu-btn.svg");
   z-index: 1;
 }
 
-.btn-explore 
-
-.btn-outline--explore 
-
-.btn-explore .btn-label .btn-explore .btn-label{
-  font-size: 0.9em;
-}
-
-.btn-explore 
-
-.btn-explore:hover,
-.btn-explore:focus-visible 
-
-.btn-fill .btn-fill{
+/* Optional curvy button fill layer */
+.btn-fill{
   display: none;
 }
 
@@ -421,15 +428,14 @@ main{
   color: var(--white);
 }
 
-.btn-ghost 
-
 /* Hero section layout */
-.hero .hero{
+.hero{
   padding: clamp(48px, 6vw, 70px) 0 clamp(60px, 7vw, 90px);
   position: relative;
   overflow: hidden;
 }
 
+/* Hero two-column grid */
 .hero-grid{
   display: grid;
   gap: clamp(24px, 4vw, 48px);
@@ -439,6 +445,7 @@ main{
   z-index: 1;
 }
 
+/* Hero text column */
 .hero-content{
   display: flex;
   flex-direction: column;
@@ -447,7 +454,7 @@ main{
   justify-content: center;
 }
 
-/* Features section block */
+/* Features highlight section */
 .features-section{
   padding: clamp(40px, 5vw, 60px) 0 clamp(56px, 6vw, 80px);
 }
@@ -482,12 +489,14 @@ main{
   color: var(--muted);
 }
 
+/* Features cards grid */
 .features-grid{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: clamp(16px, 2.4vw, 24px);
 }
 
+/* Feature tile card */
 .feature-card{
   --card-radius: clamp(16px, 2.4vw, 20px);
   padding: clamp(18px, 2.6vw, 24px);
@@ -529,7 +538,7 @@ main{
   display: block;
 }
 
-/* Belt/marquee ribbon section */
+/* Slanted belt wrapper */
 .marquee-band{
   position: relative;
   overflow: visible;
@@ -539,6 +548,7 @@ main{
   z-index: 15;
 }
 
+/* Belt track (dark/gold) */
 .marquee-track{
   position: absolute;
   width: calc(100vw + clamp(240px, 30vw, 400px));
@@ -569,6 +579,7 @@ main{
   z-index: 20;
 }
 
+/* Moving belt content row */
 .marquee-run{
   display: flex;
   align-items: center;
@@ -595,6 +606,7 @@ main{
   transform: translateX(calc(var(--belt-dark, 0px) + var(--belt-base, 0px) + var(--belt-run-offset, 0px)));
 }
 
+/* Belt item with icon + text */
 .ribbon-item{
   font-family: "Oswald", sans-serif;
   font-size: clamp(26px, 3.2vw, 44px);
@@ -621,6 +633,7 @@ main{
   transform: skewX(-3deg);
 }
 
+/* Belt icon sizing */
 .ribbon-icon{
   width: clamp(26px, 3.2vw, 44px);
   height: clamp(26px, 3.2vw, 44px);
@@ -629,9 +642,7 @@ main{
   background-repeat: no-repeat;
 }
 
-.ribbon-icon--pizza 
-
-.ribbon-icon--delivery .ribbon-icon--delivery{
+.ribbon-icon--delivery{
   background-image: url("/first-web/assets/img/belt/fast-delivery.png");
 }
 
@@ -647,17 +658,15 @@ main{
   background-image: url("/first-web/assets/img/belt/souce.png");
 }
 
-.ribbon-icon--bread 
-
-.ribbon-icon--kebab .ribbon-icon--kebab{
+.ribbon-icon--kebab{
   background-image: url("/first-web/assets/img/belt/kebab.svg");
 }
 
-.ribbon-icon--fries{
-  background-image: url("/first-web/assets/img/belt/fries.svg");
-  background-position: calc(100% + clamp(1px, 0.25vw, 4px)) center;
+.ribbon-icon--bread{
+  background-image: url("/first-web/assets/img/belt/bread-roll.png");
 }
 
+/* Belt text styling */
 .ribbon-text{
   font-family: "Oswald", sans-serif;
   font-size: clamp(26px, 3.2vw, 44px);
@@ -671,28 +680,18 @@ main{
   font-size: clamp(14px, 2vw, 20px);
 }
 
-@keyframes scroll{
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(50%);
-  }
-}
-
 @media (max-width: 1024px){
-  :root :root{
+  :root{
     --panel-right-width: min(40vw, 420px);
   }
 
-  .header-inner .header-inner{
+  .header-inner{
     flex-direction: column;
     align-items: center;
     gap: clamp(8px, 2vw, 12px);
   }
 
-  .nav .nav{
+  .nav{
     flex-wrap: wrap;
     gap: clamp(10px, 2.4vw, 16px);
     justify-content: flex-start;
@@ -701,26 +700,26 @@ main{
     left: auto;
   }
 
-  .header-cta .header-cta{
+  .header-cta{
     position: static;
     transform: none;
     margin-top: clamp(6px, 1.4vw, 8px);
   }
 
-  .hero-grid .hero-grid{
+  .hero-grid{
     grid-template-columns: 1fr;
   }
 
 }
 
 @media (max-width: 1024px){
-  .panel-vertical-text .panel-vertical-text{
+  .panel-vertical-text{
     display: none;
   }
 }
 
 @media (max-width: 526px){
-  .page-panel--full .page-panel--full{
+  .page-panel--full{
     display: none;
   }
 }
@@ -728,21 +727,20 @@ main{
 @media (max-width: 600px){
 
   .ribbon-item,
-  .ribbon-text .ribbon-item,
   .ribbon-text{
     font-size: clamp(22px, 6vw, 28px);
   }
 
-  .ribbon-icon .ribbon-icon{
+  .ribbon-icon{
     width: clamp(22px, 6vw, 28px);
     height: clamp(22px, 6vw, 28px);
   }
 
-  .marquee-track .marquee-track{
+  .marquee-track{
     height: clamp(56px, 12vw, 72px);
   }
 
-  .marquee-band .marquee-band{
+  .marquee-band{
     min-height: clamp(96px, 20vw, 120px);
   }
 }
@@ -776,6 +774,7 @@ main{
   pointer-events: none;
 }
 
+/* Section lead paragraph */
 .section-lede{
   font-size: clamp(17.25px, 1.84vw, 20.7px);
   color: var(--muted);
@@ -784,9 +783,7 @@ main{
   margin: 0 auto;
 }
 
-.section-lede--left 
-
-.hero-actions .hero-actions{
+.hero-actions{
   display: flex;
   gap: clamp(10px, 2vw, 16px);
   flex-wrap: wrap;
@@ -801,6 +798,7 @@ main{
   gap: clamp(8px, 1.2vw, 16px);
 }
 
+/* Delivery partner logos row */
 .hero-partners{
   gap: clamp(14px, 2.6vw, 22px);
   align-items: center;
@@ -811,8 +809,9 @@ main{
   margin: 0;
 }
 
+/* Individual partner logo sizing */
 .hero-partner-icon{
-  height: clamp(28px, 4.2vw, 44px);
+  height: clamp(28.6px, 4.29vw, 45.1px);
   width: auto;
   display: block;
 }
@@ -821,11 +820,13 @@ main{
   max-width: min(540px, 92vw);
 }
 
+/* Rating cards carousel container */
 .rating-slider{
   position: relative;
   min-height: 120px;
 }
 
+/* Individual rating card */
 .rating-card{
   position: absolute;
   top: 0;
@@ -909,11 +910,13 @@ main{
   line-height: 1;
 }
 
+/* Hero visual media column */
 .hero-visual{
   position: relative;
   min-height: clamp(280px, 40vw, 420px);
 }
 
+/* Centered plate image positioning */
 .hero-plate{
   position: absolute;
   left: var(--plate-center-x, 50%);
@@ -964,7 +967,7 @@ main{
   }
 }
 
-/* Generic section spacing */
+/* Generic section wrapper */
 .section{
   padding: clamp(40px, 5vw, 60px) 0;
 }
@@ -976,7 +979,7 @@ main{
   margin-bottom: clamp(8px, 1.6vw, 12px);
 }
 
-/* Locations section layout grid */
+/* Locations card + map grid */
 .locations-grid{
   display: grid;
   grid-template-columns: 1fr;
@@ -985,6 +988,7 @@ main{
   margin-top: clamp(18px, 2.4vw, 28px);
 }
 
+/* Locations promo card */
 .locations-banner{
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -1037,6 +1041,7 @@ main{
   transform: translate(40%, 32%) scale(2);
 }
 
+/* Map iframe frame sizing */
 .locations-map__frame{
   width: 100%;
   height: 320px;
@@ -1044,22 +1049,22 @@ main{
 }
 
 @media (min-width: 900px){
-  .locations-grid .locations-grid{
+  .locations-grid{
     grid-template-columns: 1fr 1fr;
   }
 
-  .locations-map__frame .locations-map__frame{
+  .locations-map__frame{
     height: 420px;
   }
 }
 
 @media (max-width: 900px){
-  .header-inner .header-inner{
+  .header-inner{
     flex-direction: column;
     align-items: center;
   }
 
-  .nav .nav{
+  .nav{
     order: 3;
     width: 100%;
     justify-content: flex-start;
@@ -1069,15 +1074,15 @@ main{
     left: auto;
   }
 
-  .header-cta .header-cta{
+  .header-cta{
     order: 2;
   }
 
-  .hero-grid .hero-grid{
+  .hero-grid{
     grid-template-columns: 1fr;
   }
 
-  .hero-visual .hero-visual{
+  .hero-visual{
     min-height: clamp(220px, 50vw, 320px);
   }
 }
@@ -1117,20 +1122,20 @@ main{
 }
 
 @media screen and (max-width: 800px){
-  .column .column{
+  .column{
     flex: 50%;
     max-width: 50%;
   }
 }
 
 @media screen and (max-width: 600px){
-  .column .column{
+  .column{
     flex: 100%;
     max-width: 100%;
   }
 }
 
-/* Footer wrapper section */
+/* Footer section wrapper */
 .footer-section{
   color: var(--white);
   margin: 0;
@@ -1138,10 +1143,12 @@ main{
   background-color: transparent;
 }
 
+/* Footer background block */
 .footer{
   background: var(--charcoal);
 }
 
+/* Footer top wave/cover wrapper */
 .footer-cover-wrap{
   width: 100%;
   line-height: 0;
@@ -1149,6 +1156,7 @@ main{
   margin-bottom: -1px;
 }
 
+/* Footer wave image */
 .footer-banner{
   display: block;
   width: 100%;
@@ -1171,6 +1179,7 @@ main{
   padding-bottom: var(--pico-typography-spacing-vertical);
 }
 
+/* Social media logo row */
 .social-logos{
   display: grid;
   grid-auto-flow: row;
@@ -1197,7 +1206,7 @@ main{
   --text-light: #555;
 }
 
-/* Reviews/testimonials section */
+/* Testimonials section wrapper */
 .testimonials-section{
   padding: 0;
   text-align: center;
@@ -1224,6 +1233,7 @@ main{
   margin-right: auto;
 }
 
+/* Testimonials slider wrapper */
 .testimonials-wrapper{
   position: relative;
   overflow: hidden;
@@ -1252,6 +1262,7 @@ main{
   margin-top: 32px;
 }
 
+/* Testimonial card */
 .testimonial-card{
   background: var(--testimonial-bg);
   flex: 0 0 clamp(286px, 28.6vw, 352px);
@@ -1292,6 +1303,7 @@ main{
   color: var(--text-dark);
 }
 
+/* Reviewer avatar circle */
 .reviewer-avatar{
   width: 32px;
   height: 32px;
@@ -1310,6 +1322,7 @@ main{
   white-space: nowrap;
 }
 
+/* Reviewer rating row */
 .review-rating{
   color: #f5a623;
 }

@@ -80,7 +80,7 @@ const initPanelVerticalText = () => {
           index % 2 === 1 ? " panel-vertical-text__word--outline" : "";
         return `<span class="panel-vertical-text__word${outlineClass}">${word}</span>`;
       })
-      .join(" ");
+      .join("");
   };
 
   updateText();

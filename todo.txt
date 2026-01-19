@@ -1,22 +1,10 @@
 Awaiting:
 	- Google API
-	- Wording
-	- Tile - right panel
-
-
 
 
 Footer changes:
 
-	- add logo
-
-
-
-
-
-	- See if we could apply shadow to the footer
-
-
+	- add DON's logo
 	- Fix the alignment in Google review card from Hero section
 	- Remove 2 buttons from Hero section and replace them with delivery app logos
 
