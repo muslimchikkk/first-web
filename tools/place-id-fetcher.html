@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Place ID Fetcher</title>
+    <style>
+      body{
+        font-family: "Source Sans 3", sans-serif;
+        margin: 24px;
+      }
+      h1{
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+      pre{
+        background: #f6f1e8;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #fdf1cb;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .note{
+        color: #5c5c5c;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Place ID Fetcher</h1>
+    <div class="note">
+      Open this file via your local server (for example:
+      http://127.0.0.1:5500/first-web/tools/place-id-fetcher.html).
+    </div>
+    <pre id="output">Loading...</pre>
+
+    <script>
+      const locations = [
+        {
+          name: "Letna",
+          position: { lat: 50.09887, lng: 14.43262 },
+          cid: "15903287924674034702",
+        },
+        {
+          name: "Vrsovice",
+          position: { lat: 50.06963, lng: 14.47037 },
+          cid: "12927121273785324709",
+        },
+        {
+          name: "Karlin",
+          position: { lat: 50.09022, lng: 14.44019 },
+          cid: "9813112090029160601",
+        },
+        {
+          name: "Lipanska",
+          position: { lat: 50.08443, lng: 14.45162 },
+          cid: "4357327423977632565",
+        },
+        {
+          name: "Vinohrady",
+          position: { lat: 50.07793, lng: 14.47681 },
+          cid: "6176864086281839369",
+        },
+        {
+          name: "Smichov",
+          position: { lat: 50.06107, lng: 14.40873 },
+          cid: "14816542102444613343",
+        },
+        {
+          name: "Nuselska",
+          position: { lat: 50.06334, lng: 14.44342 },
+          cid: "7836159461725183710",
+        },
+        {
+          name: "Zelivskeho",
+          position: { lat: 50.08541, lng: 14.47008 },
+          cid: "7069478201654368207",
+        },
+        {
+          name: "Petriny",
+          position: { lat: 50.08782, lng: 14.34443 },
+          cid: "13050713539795464899",
+        },
+        {
+          name: "Butovice",
+          position: { lat: 50.04871, lng: 14.35535 },
+          cid: "2863930431183049667",
+        },
+      ];
+
+      const output = document.getElementById("output");
+
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      const fetchApiKey = async () => {
+        const response = await fetch("../index.html", { cache: "no-store" });
+        const html = await response.text();
+        const match = html.match(/data-api-key="([^"]+)"/);
+        if (!match) {
+          throw new Error("API key not found in index.html.");
+        }
+        return match[1];
+      };
+
+      const loadMapsScript = (apiKey) =>
+        new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initPlaceIdFetcher`;
+          script.async = true;
+          script.onerror = reject;
+          document.head.appendChild(script);
+          window.initPlaceIdFetcher = resolve;
+        });
+
+      const findPlaceId = (service, location) =>
+        new Promise((resolve) => {
+          const request = {
+            query: `Dons Gemuse Kebab ${location.name}`,
+            fields: ["place_id", "name", "formatted_address"],
+            locationBias: new google.maps.Circle({
+              center: location.position,
+              radius: 1500,
+            }),
+          };
+          service.findPlaceFromQuery(request, (results, status) => {
+            if (
+              status !== google.maps.places.PlacesServiceStatus.OK ||
+              !results ||
+              results.length === 0
+            ) {
+              resolve({ status });
+              return;
+            }
+            resolve({
+              status,
+              placeId: results[0].place_id,
+              matchedName: results[0].name,
+              matchedAddress: results[0].formatted_address,
+            });
+          });
+        });
+
+      const run = async () => {
+        const apiKey = await fetchApiKey();
+        await loadMapsScript(apiKey);
+        const service = new google.maps.places.PlacesService(
+          document.createElement("div")
+        );
+        const results = [];
+
+        for (const location of locations) {
+          const result = await findPlaceId(service, location);
+          results.push({
+            ...location,
+            ...result,
+          });
+          await sleep(250);
+        }
+
+        output.textContent = JSON.stringify(results, null, 2);
+      };
+
+      run().catch((error) => {
+        output.textContent = `Error: ${error.message}`;
+      });
+    </script>
+  </body>
+</html>

@@ -995,8 +995,14 @@ main{
   overflow: hidden;
   gap: clamp(12px, 2vw, 20px);
   align-items: center;
-  padding: clamp(18px, 2.6vw, 24px);
+  padding: clamp(16px, 2.34vw, 21.6px);
   --card-bg: linear-gradient(90deg, var(--bg) 0%, var(--gold-soft) 100%);
+  --locations-content-shift: clamp(10px, 1.4vw, 16px);
+}
+
+.locations-banner__content,
+.locations-banner__image{
+  transform: translateY(calc(-1 * var(--locations-content-shift)));
 }
 
 .locations-banner__content h3{
@@ -1028,7 +1034,7 @@ main{
 }
 
 .locations-banner__content form{
-  transform: translateY(clamp(48px, 6.2vw, 64px));
+  transform: translateY(clamp(43.2px, 5.58vw, 57.6px));
   width: min(468px, 100%);
 }
 
@@ -1038,14 +1044,87 @@ main{
   height: auto;
   border-radius: clamp(10px, 2vw, 12px);
   object-fit: cover;
-  transform: translate(40%, 32%) scale(2);
+  transform: translate(40%, 27%) scale(2);
 }
 
 /* Map iframe frame sizing */
 .locations-map__frame{
   width: 100%;
-  height: 320px;
+  height: 288px;
   display: block;
+}
+
+#locations-map gmp-advanced-marker,
+#locations-map .gmp-advanced-marker{
+  --marker-background: transparent;
+  --marker-border-color: transparent;
+  --marker-glyph-color: transparent;
+  --marker-shadow: none;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#locations-map gmp-advanced-marker > div,
+#locations-map .gmp-advanced-marker > div{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#locations-map .gm-style-iw-c .gm-ui-hover-effect,
+#locations-map .gm-style-iw .gm-ui-hover-effect{
+  opacity: 1 !important;
+  width: 28px !important;
+  height: 28px !important;
+  top: 8px !important;
+  right: 8px !important;
+  border-radius: 999px;
+  background: var(--bg) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  position: absolute;
+}
+
+#locations-map .gm-style-iw-c .gm-ui-hover-effect > span,
+#locations-map .gm-style-iw .gm-ui-hover-effect > span{
+  display: none !important;
+}
+
+#locations-map .gm-style-iw-c .gm-ui-hover-effect::before,
+#locations-map .gm-style-iw-c .gm-ui-hover-effect::after,
+#locations-map .gm-style-iw .gm-ui-hover-effect::before,
+#locations-map .gm-style-iw .gm-ui-hover-effect::after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 2px;
+  background: var(--ink-strong);
+  border-radius: 2px;
+  transform-origin: center;
+}
+
+#locations-map .gm-style-iw-c .gm-ui-hover-effect::before,
+#locations-map .gm-style-iw .gm-ui-hover-effect::before{
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+#locations-map .gm-style-iw-c .gm-ui-hover-effect::after,
+#locations-map .gm-style-iw .gm-ui-hover-effect::after{
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+#locations-map .map-info-star{
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: -2px;
+}
+
+#locations-map .map-info-link{
+  color: #1a73e8;
+  text-decoration: none;
 }
 
 @media (min-width: 900px){
@@ -1054,7 +1133,7 @@ main{
   }
 
   .locations-map__frame{
-    height: 420px;
+    height: 378px;
   }
 }
 

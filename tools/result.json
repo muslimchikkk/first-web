@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Letna",
+    "position": {
+      "lat": 50.09887,
+      "lng": 14.43262
+    },
+    "cid": "15903287924674034702",
+    "status": "OK",
+    "placeId": "ChIJN3vuQACVC0cRDnz0thvUs9w",
+    "matchedName": "DON's Gemüse Kebab & Al Taglio Pizza Letna",
+    "matchedAddress": "M. Horákové 831/3, 170 00 Praha 7-Holešovice, Czechia"
+  },
+  {
+    "name": "Vrsovice",
+    "position": {
+      "lat": 50.06963,
+      "lng": 14.47037
+    },
+    "cid": "12927121273785324709",
+    "status": "OK",
+    "placeId": "ChIJZ5PLLIGTC0cRpZRexE5cZrM",
+    "matchedName": "DON's Gemüse Kebab & Pizza Al Taglio Vršovice",
+    "matchedAddress": "Vršovická 71, 100 00 Praha 10-Vršovice, Czechia"
+  },
+  {
+    "name": "Karlin",
+    "position": {
+      "lat": 50.09022,
+      "lng": 14.44019
+    },
+    "cid": "9813112090029160601",
+    "status": "OK",
+    "placeId": "ChIJZUQxVqeVC0cRmXhHK3QtL4g",
+    "matchedName": "DON's Gemüse Kebab & Al Taglio Pizza Karlin",
+    "matchedAddress": "Křižíkova 254/5, 186 00 Praha 8-Florenc, Czechia"
+  },
+  {
+    "name": "Lipanska",
+    "position": {
+      "lat": 50.08443,
+      "lng": 14.45162
+    },
+    "cid": "4357327423977632565",
+    "status": "OK",
+    "placeId": "ChIJBXplWo6TC0cRz9f5_PfUG2I",
+    "matchedName": "Dons gemuse kebab & pizza Želivského",
+    "matchedAddress": "J. Želivského 1926/7, 130 00 Praha 3-Žižkov, Czechia"
+  },
+  {
+    "name": "Vinohrady",
+    "position": {
+      "lat": 50.07793,
+      "lng": 14.47681
+    },
+    "cid": "6176864086281839369",
+    "status": "OK",
+    "placeId": "ChIJtWbpXWiTC0cRCWOy-CihuFU",
+    "matchedName": "DON's Gemüse Kebab Vinohrady",
+    "matchedAddress": "Vinohradská 2375/198, 130 00 Vinohrady, Czechia"
+  },
+  {
+    "name": "Smichov",
+    "position": {
+      "lat": 50.06107,
+      "lng": 14.40873
+    },
+    "cid": "14816542102444613343",
+    "status": "OK",
+    "placeId": "ChIJpe3hJmKVC0cR357Ub4runs0",
+    "matchedName": "DON's Gemüse Kebab & Pizza Al Taglio Smichov",
+    "matchedAddress": "Nádražní 279/1, 150 00 Praha 5-Smíchov, Czechia"
+  },
+  {
+    "name": "Nuselska",
+    "position": {
+      "lat": 50.06334,
+      "lng": 14.44342
+    },
+    "cid": "7836159461725183710",
+    "status": "OK",
+    "placeId": "ChIJ-9ywsi-VC0cR3h5yP4Ohv2w",
+    "matchedName": "DON's Gemüse Kebab & Al Taglio Pizza Nuselska",
+    "matchedAddress": "Nuselská 171/15, 140 00 Praha 4-Nusle, Czechia"
+  },
+  {
+    "name": "Zelivskeho",
+    "position": {
+      "lat": 50.08541,
+      "lng": 14.47008
+    },
+    "cid": "7069478201654368207",
+    "status": "OK",
+    "placeId": "ChIJtWbpXWiTC0cRCWOy-CihuFU",
+    "matchedName": "DON's Gemüse Kebab Vinohrady",
+    "matchedAddress": "Vinohradská 2375/198, 130 00 Vinohrady, Czechia"
+  },
+  {
+    "name": "Petriny",
+    "position": {
+      "lat": 50.08782,
+      "lng": 14.34443
+    },
+    "cid": "13050713539795464899",
+    "status": "OK",
+    "placeId": "ChIJwZaEGACVC0cRw7LjnNFyHbU",
+    "matchedName": "Don’s Gemüse Kebab & Pizza Petřiny",
+    "matchedAddress": "Brunclíkova 1945/28, 162 00 Praha 6-Břevnov, Czechia"
+  },
+  {
+    "name": "Butovice",
+    "position": {
+      "lat": 50.04871,
+      "lng": 14.35535
+    },
+    "cid": "2863930431183049667",
+    "status": "OK",
+    "placeId": "ChIJN-s5Oh-VC0cRw9MYrI25vic",
+    "matchedName": "DON's Gemüse Kebab & Pizza Al Taglio BUTOVICE",
+    "matchedAddress": "Radlická 520/117, 158 00 Praha 5-Jinonice, Czechia"
+  }
+]

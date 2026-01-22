@@ -459,6 +459,461 @@ const initPanelCut = () => {
   window.addEventListener("resize", updateCut);
 };
 
+let googleMapsScriptPromise = null;
+let placesService = null;
+const placeCache = new Map();
+const detailsFields = [
+  "name",
+  "rating",
+  "user_ratings_total",
+  "formatted_address",
+  "formatted_phone_number",
+  "url",
+];
+
+const ensurePlacesService = (map) => {
+  if (placesService) {
+    return placesService;
+  }
+  if (!window.google || !google.maps || !google.maps.places) {
+    return null;
+  }
+  const host = map || document.createElement("div");
+  placesService = new google.maps.places.PlacesService(host);
+  return placesService;
+};
+
+const normalizeKey = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]/g, "");
+
+const getLocationKey = (location) =>
+  location.placeId ||
+  location.url ||
+  location.name ||
+  JSON.stringify(location.position);
+
+const getQueryForLocation = (locationName) => {
+  const base = "DON's Gemuse Kebab";
+  return locationName ? `${base} ${locationName}` : base;
+};
+
+const fetchPlaceDetails = (location) =>
+  new Promise((resolve) => {
+    const cacheKey = getLocationKey(location);
+    if (placeCache.has(cacheKey)) {
+      resolve(placeCache.get(cacheKey));
+      return;
+    }
+
+    const service = ensurePlacesService();
+    if (!service) {
+      resolve(null);
+      return;
+    }
+
+    const finalize = (place) => {
+      placeCache.set(cacheKey, place);
+      resolve(place);
+    };
+
+    if (location.placeId) {
+      service.getDetails(
+        { placeId: location.placeId, fields: detailsFields },
+        (place, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+            finalize(place);
+          } else {
+            finalize(null);
+          }
+        }
+      );
+      return;
+    }
+
+    const query = getQueryForLocation(location.name);
+    service.findPlaceFromQuery(
+      {
+        query,
+        fields: ["place_id"],
+        locationBias: location.position,
+      },
+      (results, status) => {
+        if (
+          status !== google.maps.places.PlacesServiceStatus.OK ||
+          !results ||
+          results.length === 0
+        ) {
+          finalize(null);
+          return;
+        }
+
+        const placeId = results[0].place_id;
+        if (!placeId) {
+          finalize(null);
+          return;
+        }
+
+        service.getDetails(
+          { placeId, fields: detailsFields },
+          (place, detailStatus) => {
+            if (
+              detailStatus === google.maps.places.PlacesServiceStatus.OK &&
+              place
+            ) {
+              finalize(place);
+            } else {
+              finalize(null);
+            }
+          }
+        );
+      }
+    );
+  });
+
+const loadGoogleMapsScript = (apiKey) => {
+  if (window.google && google.maps && google.maps.Map) {
+    return Promise.resolve();
+  }
+
+  if (googleMapsScriptPromise) {
+    return googleMapsScriptPromise;
+  }
+
+  googleMapsScriptPromise = new Promise((resolve, reject) => {
+    window.__initGoogleMaps = () => {
+      resolve();
+    };
+
+    const existing = document.querySelector("script[data-google-maps]");
+    if (existing) {
+      existing.addEventListener("error", reject, { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=__initGoogleMaps&libraries=marker,places&loading=async`;
+    script.async = true;
+    script.defer = true;
+    script.dataset.googleMaps = "true";
+    script.addEventListener("error", reject, { once: true });
+    document.head.appendChild(script);
+  });
+
+  return googleMapsScriptPromise;
+};
+
+const initKebabMap = () => {
+  const mapEl = document.getElementById("locations-map");
+  if (!mapEl || !window.google || !google.maps) {
+    return;
+  }
+
+  const fallbackLocations = [
+    {
+      name: "Don's Kebab Prague",
+      position: { lat: 50.0755, lng: 14.4378 },
+    },
+  ];
+  const locations =
+    Array.isArray(window.kebabLocations) && window.kebabLocations.length > 0
+      ? window.kebabLocations
+      : fallbackLocations;
+  const center = locations[0]?.position || fallbackLocations[0].position;
+
+  const mapId = mapEl.dataset.mapId || "";
+  const map = new google.maps.Map(mapEl, {
+    center,
+    zoom: 12,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
+    mapId: mapId || undefined,
+  });
+
+  const bounds = new google.maps.LatLngBounds();
+
+  const infoWindow = new google.maps.InfoWindow();
+  ensurePlacesService(map);
+  const iconUrl = new URL(
+    "assets/img/main-page/pin.svg",
+    window.location.href
+  ).href;
+  const markerSize = 31;
+  let infoNonce = 0;
+
+  const escapeHtml = (value) =>
+    String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+
+  const buildInfoContent = (name, url, placeDetails, isLoading = false) => {
+    const displayName =
+      placeDetails?.name || `DON's Gemuse Kebab${name ? ` ${name}` : ""}`;
+    const rating = Number.isFinite(placeDetails?.rating)
+      ? placeDetails.rating.toFixed(1)
+      : null;
+    const reviews = placeDetails?.user_ratings_total
+      ? ` (${placeDetails.user_ratings_total})`
+      : "";
+    const address = placeDetails?.formatted_address;
+    const phone = placeDetails?.formatted_phone_number;
+    const mapLink = placeDetails?.url || url;
+
+    return `
+      <div style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; line-height: 1.4; min-width: 180px; padding-right: 36px;">
+        <strong style="display:block; margin-bottom:6px;">${escapeHtml(
+          displayName
+        )}</strong>
+          ${
+            rating
+              ? `<div style="margin-bottom:6px; color:#2b2e2f;">
+                  <img class="map-info-star" src="assets/img/rating-stars/star-10.svg" alt="" aria-hidden="true" />
+                  ${rating}${reviews}
+                </div>`
+              : ""
+          }
+        ${
+          address
+            ? `<div style="margin-bottom:6px; color:#5c5c5c; font-size:12px;">${escapeHtml(
+                address
+              )}</div>`
+            : ""
+        }
+        ${
+          phone
+            ? `<div style="margin-bottom:6px; color:#5c5c5c; font-size:12px;">${escapeHtml(
+                phone
+              )}</div>`
+            : ""
+        }
+        ${
+          isLoading
+            ? `<div style="margin-top:6px; color:#6f6f6f; font-size:12px;">Loading details...</div>`
+            : ""
+        }
+          ${
+            mapLink
+              ? `<a href="${mapLink}" target="_blank" rel="noopener" class="map-info-link" style="font-size:12px;">Open in Google Maps</a>`
+              : ""
+          }
+      </div>
+    `;
+  };
+
+  const createMarkerContent = () => {
+    const wrapper = document.createElement("div");
+    wrapper.style.width = `${markerSize}px`;
+    wrapper.style.height = `${markerSize}px`;
+    wrapper.style.display = "flex";
+    wrapper.style.alignItems = "center";
+    wrapper.style.justifyContent = "center";
+    wrapper.style.background = "transparent";
+    wrapper.style.border = "none";
+    wrapper.style.boxShadow = "none";
+    wrapper.style.padding = "0";
+    wrapper.style.margin = "0";
+    wrapper.style.borderRadius = "0";
+    wrapper.style.overflow = "visible";
+
+    const img = document.createElement("img");
+    img.src = iconUrl;
+    img.alt = "";
+    img.width = markerSize;
+    img.height = markerSize;
+    img.style.display = "block";
+    img.style.background = "transparent";
+    img.style.border = "none";
+    img.style.boxShadow = "none";
+
+    wrapper.appendChild(img);
+    return wrapper;
+  };
+
+  const styleAdvancedMarker = (marker) => {
+    const element = marker.element;
+    if (!element) {
+      return;
+    }
+    element.style.background = "transparent";
+    element.style.border = "0";
+    element.style.boxShadow = "none";
+    element.style.setProperty("--marker-background", "transparent");
+    element.style.setProperty("--marker-border-color", "transparent");
+    element.style.setProperty("--marker-glyph-color", "transparent");
+    element.style.setProperty("--marker-shadow", "none");
+  };
+
+  const useAdvanced =
+    mapId &&
+    google.maps.marker &&
+    google.maps.marker.AdvancedMarkerElement;
+
+  locations.forEach((location) => {
+    const { name, position, url } = location;
+    let marker;
+
+    if (useAdvanced) {
+      marker = new google.maps.marker.AdvancedMarkerElement({
+        position,
+        map,
+        title: name,
+        content: createMarkerContent(),
+      });
+      styleAdvancedMarker(marker);
+    } else {
+      marker = new google.maps.Marker({
+        position,
+        map,
+        title: name,
+        icon: {
+          url: iconUrl,
+          scaledSize: new google.maps.Size(markerSize, markerSize),
+          anchor: new google.maps.Point(markerSize / 2, markerSize),
+        },
+        optimized: false,
+      });
+    }
+
+    marker.addListener("click", () => {
+      const currentNonce = (infoNonce += 1);
+      infoWindow.setContent(buildInfoContent(name, url, null, true));
+      infoWindow.open({ map, anchor: marker });
+
+      fetchPlaceDetails(location).then((place) => {
+        if (currentNonce !== infoNonce) {
+          return;
+        }
+        infoWindow.setContent(buildInfoContent(name, url, place, false));
+        infoWindow.open({ map, anchor: marker });
+      });
+    });
+    bounds.extend(position);
+  });
+
+  if (locations.length > 1) {
+    map.fitBounds(bounds);
+  }
+};
+
+const initHeroRatingPlaces = () => {
+  const cards = document.querySelectorAll(".rating-card");
+  if (cards.length === 0) {
+    return;
+  }
+
+  const mapEl = document.getElementById("locations-map");
+  const apiKey = mapEl ? mapEl.dataset.apiKey : "";
+  if (!apiKey) {
+    return;
+  }
+
+  const locations = Array.isArray(window.kebabLocations)
+    ? window.kebabLocations
+    : [];
+  if (locations.length === 0) {
+    return;
+  }
+
+  const locationIndex = new Map();
+  locations.forEach((location) => {
+    if (location.name) {
+      locationIndex.set(normalizeKey(location.name), location);
+    }
+  });
+
+  loadGoogleMapsScript(apiKey)
+    .then(() => {
+      ensurePlacesService();
+      const updates = [];
+
+      cards.forEach((card) => {
+        const locationEl = card.querySelector(".rating-location");
+        const scoreEl = card.querySelector(".rating-score");
+        const countEl = card.querySelector(".rating-count");
+        if (!locationEl || !scoreEl || !countEl) {
+          return;
+        }
+
+        const locationKey = normalizeKey(locationEl.textContent);
+        const location = locationIndex.get(locationKey);
+        if (!location) {
+          return;
+        }
+
+        updates.push(
+          fetchPlaceDetails(location).then((place) => {
+            if (!place) {
+              return;
+            }
+            if (Number.isFinite(place.rating)) {
+              scoreEl.textContent = place.rating.toFixed(1);
+            }
+            if (Number.isFinite(place.user_ratings_total)) {
+              countEl.textContent = `(${place.user_ratings_total})`;
+            }
+          })
+        );
+      });
+
+      return Promise.all(updates);
+    })
+    .then(() => {
+      initRatingStars();
+    })
+    .catch((error) => {
+      console.error("Hero ratings failed to load.", error);
+    });
+};
+
+const initLazyMap = () => {
+  const mapEl = document.getElementById("locations-map");
+  if (!mapEl) {
+    return;
+  }
+
+  const apiKey = mapEl.dataset.apiKey;
+  if (!apiKey) {
+    console.warn("Missing Google Maps API key on #locations-map.");
+    return;
+  }
+
+  const loadMap = () => {
+    if (mapEl.dataset.mapLoaded) {
+      return;
+    }
+    mapEl.dataset.mapLoaded = "true";
+    loadGoogleMapsScript(apiKey)
+      .then(() => {
+        initKebabMap();
+      })
+      .catch((error) => {
+        console.error("Google Maps failed to load.", error);
+      });
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          loadMap();
+        }
+      },
+      { rootMargin: "120px 0px" }
+    );
+    observer.observe(mapEl);
+  } else {
+    loadMap();
+  }
+};
+
 const includeTargets = document.querySelectorAll("[data-include]");
 const includeJobs = Array.from(includeTargets).map((target) => {
   const file = target.getAttribute("data-include");
@@ -485,4 +940,6 @@ Promise.all(includeJobs).then(() => {
   initHeroSlider();
   initTestimonialsAvatars();
   initTestimonialsMarquee();
+  initHeroRatingPlaces();
+  initLazyMap();
 });
