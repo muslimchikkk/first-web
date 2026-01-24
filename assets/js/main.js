@@ -193,8 +193,46 @@ const initRatingStars = () => {
       }
     }
 
-    while (starsEl.children.length < totalStars) {
-      starsEl.appendChild(createStar("star-00.svg"));
+  while (starsEl.children.length < totalStars) {
+    starsEl.appendChild(createStar("star-00.svg"));
+  }
+});
+};
+
+const initReviewStars = () => {
+  const ratings = document.querySelectorAll(".review-rating");
+  if (ratings.length === 0) {
+    return;
+  }
+
+  const starPath = "assets/img/rating-stars";
+
+  const createStar = (fileName) => {
+    const img = document.createElement("img");
+    img.className = "review-star";
+    img.src = `${starPath}/${fileName}`;
+    img.alt = "";
+    img.setAttribute("aria-hidden", "true");
+    return img;
+  };
+
+  ratings.forEach((ratingEl) => {
+    const target =
+      ratingEl.querySelector(".review-rating-link") || ratingEl;
+    const ratingValue = parseInt(target.dataset.rating || "", 10);
+    const text = target.textContent || "";
+    const count = (text.match(/★/g) || []).length;
+    const filled = Number.isFinite(ratingValue) && ratingValue > 0
+      ? Math.min(5, ratingValue)
+      : count;
+    const totalStars = 5;
+
+    target.innerHTML = "";
+    for (let i = 0; i < filled; i += 1) {
+      target.appendChild(createStar("star-10.svg"));
+    }
+    while (target.children.length < totalStars) {
+      target.appendChild(createStar("star-00.svg"));
     }
   });
 };
@@ -404,6 +442,206 @@ const initTestimonialsMarquee = () => {
   window.addEventListener("resize", () => rows.forEach(updateRow));
 };
 
+const initTestimonialsReviews = () => {
+  const section =
+    document.querySelector(".testimonials-section") ||
+    document.getElementById("reviews");
+  if (!section) {
+    return;
+  }
+
+  const baseCards = Array.from(section.querySelectorAll(".testimonial-card"));
+  if (baseCards.length === 0) {
+    return;
+  }
+
+  const mapEl = document.getElementById("locations-map");
+  const apiKey = mapEl ? mapEl.dataset.apiKey : "";
+  if (!apiKey) {
+    return;
+  }
+
+  const locations = Array.isArray(window.kebabLocations)
+    ? window.kebabLocations
+    : [];
+  if (locations.length === 0) {
+    return;
+  }
+
+  const escapeHtml = (value) =>
+    String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+
+  const escapeAttr = (value) =>
+    String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+    const truncateReview = (text, maxLength = 60) => {
+      const normalized = String(text || "").replace(/\s+/g, " ").trim();
+      if (normalized.length <= maxLength) {
+        return normalized;
+      }
+      const snippet = normalized.slice(0, maxLength + 1);
+      const lastSpace = snippet.lastIndexOf(" ");
+      const trimmed =
+        lastSpace > 0 ? snippet.slice(0, lastSpace) : normalized.slice(0, maxLength);
+      return `${trimmed.trim()} ...`;
+    };
+
+    let emojiRegex = null;
+    try {
+      emojiRegex = new RegExp(
+        "(\\p{Extended_Pictographic}|\\p{Emoji_Presentation})",
+        "gu"
+      );
+    } catch (error) {
+      emojiRegex = null;
+    }
+
+    const formatReviewText = (text) => {
+      const escaped = escapeHtml(text);
+      if (!emojiRegex) {
+        return escaped;
+      }
+      return escaped.replace(
+        emojiRegex,
+        '<span class="review-emoji">$1</span>'
+      );
+    };
+
+  const shuffle = (list) => {
+    const copy = list.slice();
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  };
+
+  let loaded = false;
+
+  const loadReviews = () => {
+    if (loaded) {
+      return;
+    }
+    loaded = true;
+
+    loadGoogleMapsScript(apiKey)
+      .then(() => {
+        ensurePlacesService();
+        return Promise.all(
+          locations.map((location) =>
+            fetchPlaceDetails(location, detailsFieldsWithReviews).then(
+              (place) => ({ place })
+            )
+          )
+        );
+      })
+      .then((results) => {
+        const allReviews = [];
+        results.forEach(({ place }) => {
+          const reviews = Array.isArray(place?.reviews) ? place.reviews : [];
+          reviews.forEach((review) => {
+            const rating = Number(review?.rating);
+            const text = (review?.text || "").trim();
+            if (!Number.isFinite(rating) || !text) {
+              return;
+            }
+            allReviews.push({ review, place, rating });
+          });
+        });
+
+        if (allReviews.length === 0) {
+          return;
+        }
+
+        const high = allReviews.filter((item) => item.rating >= 4);
+        const mid = allReviews.filter(
+          (item) => item.rating >= 3 && item.rating < 4
+        );
+
+        let selected = shuffle(high);
+        if (selected.length < baseCards.length) {
+          selected = selected.concat(shuffle(mid));
+        }
+
+        if (selected.length === 0) {
+          return;
+        }
+
+        const cards = Array.from(section.querySelectorAll(".testimonial-card"));
+        cards.forEach((card, index) => {
+          const item = selected[index % selected.length];
+          if (!item) {
+            return;
+          }
+
+          const reviewTextEl = card.querySelector(".review-text");
+          const avatarEl = card.querySelector(".reviewer-avatar");
+          const nameEl = card.querySelector(".reviewer-name-text");
+          const ratingEl = card.querySelector(".review-rating");
+
+          const authorName = (item.review?.author_name || "Guest").trim();
+          const initial = authorName ? authorName.charAt(0).toUpperCase() : "?";
+          const ratingValue = Math.round(item.rating);
+          const reviewText = truncateReview(
+            item.review?.text || "Great food!"
+          );
+
+          if (reviewTextEl) {
+            reviewTextEl.innerHTML = `&ldquo;${formatReviewText(
+              reviewText
+            )}&rdquo;`;
+          }
+          if (avatarEl) {
+            avatarEl.textContent = initial;
+          }
+          if (nameEl) {
+            nameEl.textContent = authorName;
+          }
+          if (ratingEl) {
+            const link =
+              item.review?.author_url || item.place?.url || "";
+            const ratingMarkup = link
+              ? `<a class="review-rating-link" href="${escapeAttr(
+                  link
+                )}" target="_blank" rel="noopener" data-rating="${ratingValue}" aria-label="View review on Google Maps"></a>`
+              : `<span class="review-rating-link" data-rating="${ratingValue}" aria-label="Review rating"></span>`;
+            ratingEl.innerHTML = ratingMarkup;
+          }
+        });
+
+        initReviewStars();
+        initTestimonialsAvatars();
+      })
+      .catch((error) => {
+        console.error("Reviews failed to load.", error);
+      });
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          loadReviews();
+        }
+      },
+      { rootMargin: "200px 0px" }
+    );
+    observer.observe(section);
+  } else {
+    loadReviews();
+  }
+};
+
 const getSkewYRadians = (element) => {
   const transform = getComputedStyle(element).transform;
   if (!transform || transform === "none") {
@@ -462,7 +700,8 @@ const initPanelCut = () => {
 let googleMapsScriptPromise = null;
 let placesService = null;
 const placeCache = new Map();
-const detailsFields = [
+const placeCacheWithReviews = new Map();
+const detailsFieldsBase = [
   "name",
   "rating",
   "user_ratings_total",
@@ -470,6 +709,7 @@ const detailsFields = [
   "formatted_phone_number",
   "url",
 ];
+const detailsFieldsWithReviews = [...detailsFieldsBase, "reviews"];
 
 const ensurePlacesService = (map) => {
   if (placesService) {
@@ -501,11 +741,17 @@ const getQueryForLocation = (locationName) => {
   return locationName ? `${base} ${locationName}` : base;
 };
 
-const fetchPlaceDetails = (location) =>
+const fetchPlaceDetails = (location, fields = detailsFieldsBase) =>
   new Promise((resolve) => {
     const cacheKey = getLocationKey(location);
-    if (placeCache.has(cacheKey)) {
-      resolve(placeCache.get(cacheKey));
+    const wantsReviews = fields.includes("reviews");
+    if (!wantsReviews && placeCacheWithReviews.has(cacheKey)) {
+      resolve(placeCacheWithReviews.get(cacheKey));
+      return;
+    }
+    const activeCache = wantsReviews ? placeCacheWithReviews : placeCache;
+    if (activeCache.has(cacheKey)) {
+      resolve(activeCache.get(cacheKey));
       return;
     }
 
@@ -516,18 +762,24 @@ const fetchPlaceDetails = (location) =>
     }
 
     const finalize = (place) => {
-      placeCache.set(cacheKey, place);
+      activeCache.set(cacheKey, place);
+      if (place) {
+        placeCache.set(cacheKey, place);
+        if (wantsReviews) {
+          placeCacheWithReviews.set(cacheKey, place);
+        }
+      }
       resolve(place);
     };
 
     if (location.placeId) {
-      service.getDetails(
-        { placeId: location.placeId, fields: detailsFields },
-        (place, status) => {
-          if (status === google.maps.places.PlacesServiceStatus.OK && place) {
-            finalize(place);
-          } else {
-            finalize(null);
+        service.getDetails(
+          { placeId: location.placeId, fields },
+          (place, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+              finalize(place);
+            } else {
+              finalize(null);
           }
         }
       );
@@ -557,12 +809,12 @@ const fetchPlaceDetails = (location) =>
           return;
         }
 
-        service.getDetails(
-          { placeId, fields: detailsFields },
-          (place, detailStatus) => {
-            if (
-              detailStatus === google.maps.places.PlacesServiceStatus.OK &&
-              place
+          service.getDetails(
+            { placeId, fields },
+            (place, detailStatus) => {
+              if (
+                detailStatus === google.maps.places.PlacesServiceStatus.OK &&
+                place
             ) {
               finalize(place);
             } else {
@@ -938,7 +1190,9 @@ Promise.all(includeJobs).then(() => {
   initBelts();
   initPanelCut();
   initHeroSlider();
+  initReviewStars();
   initTestimonialsAvatars();
+  initTestimonialsReviews();
   initTestimonialsMarquee();
   initHeroRatingPlaces();
   initLazyMap();
