@@ -516,6 +516,31 @@ const initTestimonialsReviews = () => {
       );
     };
 
+    const formatReviewerName = (name) => {
+      const normalized = String(name || "").trim();
+      if (!normalized) {
+        return "Guest";
+      }
+      if (normalized.length <= 15) {
+        return normalized;
+      }
+      const parts = normalized.split(/\s+/).filter(Boolean);
+      const first = parts[0] || "";
+      const last = parts.length > 1 ? parts[parts.length - 1] : "";
+      if (first.length > 12) {
+        const firstInitial = first.charAt(0).toUpperCase();
+        const lastInitial = last ? last.charAt(0).toUpperCase() : "";
+        return lastInitial
+          ? `${firstInitial}. ${lastInitial}.`
+          : `${firstInitial}.`;
+      }
+      const lastInitial = last ? last.charAt(0).toUpperCase() : "";
+      return lastInitial ? `${first} ${lastInitial}.` : first;
+    };
+
+    const isDefaultProfilePhoto = (url) =>
+      /default-user|default_avatar|default-avatar|default_profile/i.test(url);
+
   const shuffle = (list) => {
     const copy = list.slice();
     for (let i = copy.length - 1; i > 0; i -= 1) {
@@ -602,9 +627,20 @@ const initTestimonialsReviews = () => {
           }
           if (avatarEl) {
             avatarEl.textContent = initial;
+            avatarEl.classList.remove("has-photo");
+            avatarEl.style.backgroundImage = "";
+            const photoUrl = item.review?.profile_photo_url;
+            if (photoUrl && !isDefaultProfilePhoto(photoUrl)) {
+              const tester = new Image();
+              tester.onload = () => {
+                avatarEl.classList.add("has-photo");
+                avatarEl.style.backgroundImage = `url("${photoUrl}")`;
+              };
+              tester.src = photoUrl;
+            }
           }
           if (nameEl) {
-            nameEl.textContent = authorName;
+            nameEl.textContent = formatReviewerName(authorName);
           }
           if (ratingEl) {
             const link =
@@ -615,6 +651,17 @@ const initTestimonialsReviews = () => {
                 )}" target="_blank" rel="noopener" data-rating="${ratingValue}" aria-label="View review on Google Maps"></a>`
               : `<span class="review-rating-link" data-rating="${ratingValue}" aria-label="Review rating"></span>`;
             ratingEl.innerHTML = ratingMarkup;
+          }
+          const metaEl = card.querySelector(".review-meta");
+          if (metaEl) {
+            const existingBranch = metaEl.querySelector(".review-branch");
+            if (existingBranch) {
+              existingBranch.remove();
+            }
+            const branchEl = document.createElement("div");
+            branchEl.className = "review-branch";
+            branchEl.textContent = item.place?.name || "";
+            metaEl.appendChild(branchEl);
           }
         });
 
@@ -858,6 +905,104 @@ const loadGoogleMapsScript = (apiKey) => {
   return googleMapsScriptPromise;
 };
 
+const initLocationSearch = (
+  map,
+  locations,
+  locationMarkers,
+  openLocationInfo
+) => {
+  const form = document.querySelector('form[role="find-location"]');
+  const input = form
+    ? form.querySelector('input[name="search"]')
+    : null;
+  if (!input || !window.google || !google.maps || !google.maps.places) {
+    return;
+  }
+  if (input.dataset.autocompleteReady) {
+    return;
+  }
+  input.dataset.autocompleteReady = "true";
+
+  if (form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+    });
+  }
+
+  const pragueBounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(49.94, 14.22),
+    new google.maps.LatLng(50.2, 14.7)
+  );
+
+  const autocomplete = new google.maps.places.Autocomplete(input, {
+    fields: ["geometry", "name", "place_id"],
+    bounds: pragueBounds,
+    strictBounds: true,
+    componentRestrictions: { country: "cz" },
+  });
+
+  let searchMarker = null;
+
+  const distanceScore = (point, target) => {
+    const dLat = point.lat - target.lat();
+    const dLng = point.lng - target.lng();
+    return dLat * dLat + dLng * dLng;
+  };
+
+  autocomplete.addListener("place_changed", () => {
+    const place = autocomplete.getPlace();
+    if (!place?.geometry?.location) {
+      return;
+    }
+
+    const selected = place.geometry.location;
+    let nearest = null;
+    let bestScore = Infinity;
+
+    locations.forEach((location) => {
+      if (!location?.position) {
+        return;
+      }
+      const score = distanceScore(location.position, selected);
+      if (score < bestScore) {
+        bestScore = score;
+        nearest = location;
+      }
+    });
+
+    if (!searchMarker) {
+      searchMarker = new google.maps.Marker({
+        map,
+        clickable: false,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 6,
+          fillColor: "#1a73e8",
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: 2,
+        },
+        zIndex: 3,
+      });
+    }
+    searchMarker.setPosition(selected);
+
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend(selected);
+    if (nearest?.position) {
+      bounds.extend(nearest.position);
+    }
+    map.fitBounds(bounds, 60);
+
+    if (nearest && locationMarkers && typeof openLocationInfo === "function") {
+      const marker = locationMarkers.get(getLocationKey(nearest));
+      if (marker) {
+        openLocationInfo(nearest, marker);
+      }
+    }
+  });
+};
+
 const initKebabMap = () => {
   const mapEl = document.getElementById("locations-map");
   if (!mapEl || !window.google || !google.maps) {
@@ -886,7 +1031,10 @@ const initKebabMap = () => {
     mapId: mapId || undefined,
   });
 
+  window.kebabMap = map;
+
   const bounds = new google.maps.LatLngBounds();
+  const locationMarkers = new Map();
 
   const infoWindow = new google.maps.InfoWindow();
   ensurePlacesService(map);
@@ -1007,6 +1155,21 @@ const initKebabMap = () => {
     google.maps.marker &&
     google.maps.marker.AdvancedMarkerElement;
 
+  const openLocationInfo = (location, marker) => {
+    const { name, url } = location || {};
+    const currentNonce = (infoNonce += 1);
+    infoWindow.setContent(buildInfoContent(name, url, null, true));
+    infoWindow.open({ map, anchor: marker });
+
+    fetchPlaceDetails(location).then((place) => {
+      if (currentNonce !== infoNonce) {
+        return;
+      }
+      infoWindow.setContent(buildInfoContent(name, url, place, false));
+      infoWindow.open({ map, anchor: marker });
+    });
+  };
+
   locations.forEach((location) => {
     const { name, position, url } = location;
     let marker;
@@ -1034,24 +1197,17 @@ const initKebabMap = () => {
     }
 
     marker.addListener("click", () => {
-      const currentNonce = (infoNonce += 1);
-      infoWindow.setContent(buildInfoContent(name, url, null, true));
-      infoWindow.open({ map, anchor: marker });
-
-      fetchPlaceDetails(location).then((place) => {
-        if (currentNonce !== infoNonce) {
-          return;
-        }
-        infoWindow.setContent(buildInfoContent(name, url, place, false));
-        infoWindow.open({ map, anchor: marker });
-      });
+      openLocationInfo(location, marker);
     });
+    locationMarkers.set(getLocationKey(location), marker);
     bounds.extend(position);
   });
 
   if (locations.length > 1) {
     map.fitBounds(bounds);
   }
+
+  initLocationSearch(map, locations, locationMarkers, openLocationInfo);
 };
 
 const initHeroRatingPlaces = () => {
