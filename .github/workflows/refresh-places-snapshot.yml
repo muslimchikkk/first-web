@@ -1,0 +1,42 @@
+name: Refresh Places Snapshot
+
+on:
+  schedule:
+    # Every Monday at 03:15 UTC
+    - cron: "15 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate weekly places snapshot
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+        run: node tools/refresh-places-snapshot.mjs
+
+      - name: Commit and push snapshot if changed
+        run: |
+          if git diff --quiet -- assets/data/places-snapshot.json; then
+            echo "No snapshot changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/data/places-snapshot.json
+          git commit -m "chore: refresh places snapshot"
+          git push

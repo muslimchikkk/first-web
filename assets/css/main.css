@@ -1369,6 +1369,15 @@ main {
   transform: scale(1.05);
 }
 
+.testimonial-card.is-clickable {
+  cursor: pointer;
+}
+
+.testimonial-card.is-clickable:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
 .review-text {
   font-size: 0.9rem;
   font-style: italic;
@@ -1427,6 +1436,11 @@ main {
 
 .reviewer-name-text {
   white-space: nowrap;
+}
+
+.testimonial-card.is-clickable .reviewer-name,
+.testimonial-card.is-clickable .reviewer-name-text {
+  text-decoration: none;
 }
 
 /* Reviewer rating row */

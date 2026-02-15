@@ -455,12 +455,6 @@ const initTestimonialsReviews = () => {
     return;
   }
 
-  const mapEl = document.getElementById("locations-map");
-  const apiKey = mapEl ? mapEl.dataset.apiKey : "";
-  if (!apiKey) {
-    return;
-  }
-
   const locations = Array.isArray(window.kebabLocations)
     ? window.kebabLocations
     : [];
@@ -551,6 +545,36 @@ const initTestimonialsReviews = () => {
   };
 
   let loaded = false;
+  const openReviewCardLink = (card) => {
+    const link = card?.dataset?.reviewUrl || "";
+    if (!link) {
+      return;
+    }
+    window.open(link, "_blank", "noopener,noreferrer");
+  };
+
+  section.addEventListener("click", (event) => {
+    if (event.target.closest(".review-rating-link")) {
+      return;
+    }
+    const card = event.target.closest(".testimonial-card");
+    if (!card || !section.contains(card) || !card.dataset.reviewUrl) {
+      return;
+    }
+    openReviewCardLink(card);
+  });
+
+  section.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+    const card = event.target.closest(".testimonial-card.is-clickable");
+    if (!card || !section.contains(card)) {
+      return;
+    }
+    event.preventDefault();
+    openReviewCardLink(card);
+  });
 
   const loadReviews = () => {
     if (loaded) {
@@ -558,17 +582,16 @@ const initTestimonialsReviews = () => {
     }
     loaded = true;
 
-    loadGoogleMapsScript(apiKey)
-      .then(() => {
-        ensurePlacesService();
-        return Promise.all(
+    loadPlacesSnapshot()
+      .then(() =>
+        Promise.all(
           locations.map((location) =>
             fetchPlaceDetails(location, detailsFieldsWithReviews).then(
               (place) => ({ place })
             )
           )
-        );
-      })
+        )
+      )
       .then((results) => {
         const allReviews = [];
         results.forEach(({ place }) => {
@@ -642,15 +665,30 @@ const initTestimonialsReviews = () => {
           if (nameEl) {
             nameEl.textContent = formatReviewerName(authorName);
           }
+          const reviewLink = item.review?.author_url || item.place?.url || "";
           if (ratingEl) {
-            const link =
-              item.review?.author_url || item.place?.url || "";
-            const ratingMarkup = link
+            const ratingMarkup = reviewLink
               ? `<a class="review-rating-link" href="${escapeAttr(
-                  link
-                )}" target="_blank" rel="noopener" data-rating="${ratingValue}" aria-label="View review on Google Maps"></a>`
+                  reviewLink
+                )}" target="_blank" rel="noopener noreferrer" data-rating="${ratingValue}" aria-label="View review on Google Maps"></a>`
               : `<span class="review-rating-link" data-rating="${ratingValue}" aria-label="Review rating"></span>`;
             ratingEl.innerHTML = ratingMarkup;
+          }
+          if (reviewLink) {
+            card.dataset.reviewUrl = reviewLink;
+            card.classList.add("is-clickable");
+            card.tabIndex = 0;
+            card.setAttribute("role", "link");
+            card.setAttribute(
+              "aria-label",
+              `Open review by ${authorName} on Google Maps`
+            );
+          } else {
+            delete card.dataset.reviewUrl;
+            card.classList.remove("is-clickable");
+            card.removeAttribute("tabindex");
+            card.removeAttribute("role");
+            card.removeAttribute("aria-label");
           }
           const metaEl = card.querySelector(".review-meta");
           if (metaEl) {
@@ -748,6 +786,10 @@ let googleMapsScriptPromise = null;
 let placesService = null;
 const placeCache = new Map();
 const placeCacheWithReviews = new Map();
+const SNAPSHOT_URL = "assets/data/places-snapshot.json";
+const DEFAULT_LIVE_PLACES_FALLBACK = false;
+let placesSnapshotPromise = null;
+let placesSnapshotData = null;
 const detailsFieldsBase = [
   "name",
   "rating",
@@ -757,6 +799,90 @@ const detailsFieldsBase = [
   "url",
 ];
 const detailsFieldsWithReviews = [...detailsFieldsBase, "reviews"];
+
+const toFiniteNumberOrNull = (value) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const loadPlacesSnapshot = () => {
+  if (placesSnapshotPromise) {
+    return placesSnapshotPromise;
+  }
+
+  placesSnapshotPromise = fetch(SNAPSHOT_URL)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Snapshot HTTP ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((snapshot) => {
+      placesSnapshotData = snapshot;
+
+      const generatedAtMs = Date.parse(snapshot?.generatedAt || "");
+      const refreshDays = Number(snapshot?.refreshIntervalDays) || 7;
+      if (Number.isFinite(generatedAtMs)) {
+        const maxAgeMs = refreshDays * 24 * 60 * 60 * 1000;
+        const ageMs = Date.now() - generatedAtMs;
+        if (ageMs > maxAgeMs) {
+          console.warn(
+            `places-snapshot.json is stale (${Math.floor(
+              ageMs / (24 * 60 * 60 * 1000)
+            )} days old). Run the snapshot refresh script.`
+          );
+        }
+      }
+
+      return placesSnapshotData;
+    })
+    .catch((error) => {
+      console.warn("Snapshot load failed. Falling back to current UI data.", error);
+      placesSnapshotData = null;
+      return null;
+    });
+
+  return placesSnapshotPromise;
+};
+
+const getSnapshotPlace = (location, wantsReviews = false) => {
+  if (!placesSnapshotData || !Array.isArray(placesSnapshotData.locations)) {
+    return null;
+  }
+
+  const nameKey = normalizeKey(location?.name || "");
+  const match = placesSnapshotData.locations.find((item) => {
+    if (!item) {
+      return false;
+    }
+    if (location?.placeId && item.placeId === location.placeId) {
+      return true;
+    }
+    if (location?.url && item.url === location.url) {
+      return true;
+    }
+    return normalizeKey(item?.name || "") === nameKey;
+  });
+
+  if (!match) {
+    return null;
+  }
+
+  if (wantsReviews && !Array.isArray(match.reviews)) {
+    return null;
+  }
+
+  return {
+    name: match.name || location?.name || "",
+    place_id: match.placeId || location?.placeId || "",
+    rating: toFiniteNumberOrNull(match.rating),
+    user_ratings_total: toFiniteNumberOrNull(match.user_ratings_total),
+    formatted_address: match.formatted_address || "",
+    formatted_phone_number: match.formatted_phone_number || "",
+    url: match.url || location?.url || "",
+    reviews: Array.isArray(match.reviews) ? match.reviews : [],
+  };
+};
 
 const ensurePlacesService = (map) => {
   if (placesService) {
@@ -774,7 +900,7 @@ const normalizeKey = (value) =>
   String(value || "")
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]/g, "");
 
 const getLocationKey = (location) =>
@@ -788,10 +914,26 @@ const getQueryForLocation = (locationName) => {
   return locationName ? `${base} ${locationName}` : base;
 };
 
-const fetchPlaceDetails = (location, fields = detailsFieldsBase) =>
-  new Promise((resolve) => {
+const fetchPlaceDetails = async (
+  location,
+  fields = detailsFieldsBase,
+  options = {}
+) => {
+  const { allowLiveFallback = DEFAULT_LIVE_PLACES_FALLBACK } = options;
+  await loadPlacesSnapshot();
+
+  const wantsReviews = fields.includes("reviews");
+  const snapshotPlace = getSnapshotPlace(location, wantsReviews);
+  if (snapshotPlace) {
+    return snapshotPlace;
+  }
+
+  if (!allowLiveFallback) {
+    return null;
+  }
+
+  return new Promise((resolve) => {
     const cacheKey = getLocationKey(location);
-    const wantsReviews = fields.includes("reviews");
     if (!wantsReviews && placeCacheWithReviews.has(cacheKey)) {
       resolve(placeCacheWithReviews.get(cacheKey));
       return;
@@ -872,6 +1014,7 @@ const fetchPlaceDetails = (location, fields = detailsFieldsBase) =>
       }
     );
   });
+};
 
 const loadGoogleMapsScript = (apiKey) => {
   if (window.google && google.maps && google.maps.Map) {
@@ -1008,6 +1151,8 @@ const initKebabMap = () => {
   if (!mapEl || !window.google || !google.maps) {
     return;
   }
+  const allowLivePlaceFallback =
+    mapEl.dataset.livePlaceFallback !== "false";
 
   const fallbackLocations = [
     {
@@ -1100,7 +1245,7 @@ const initKebabMap = () => {
         }
           ${
             mapLink
-              ? `<a href="${mapLink}" target="_blank" rel="noopener" class="map-info-link" style="font-size:12px;">Open in Google Maps</a>`
+              ? `<a href="${mapLink}" target="_blank" rel="noopener noreferrer" class="map-info-link" style="font-size:12px;">Open in Google Maps</a>`
               : ""
           }
       </div>
@@ -1158,10 +1303,14 @@ const initKebabMap = () => {
   const openLocationInfo = (location, marker) => {
     const { name, url } = location || {};
     const currentNonce = (infoNonce += 1);
-    infoWindow.setContent(buildInfoContent(name, url, null, true));
+    infoWindow.setContent(
+      buildInfoContent(name, url, null, allowLivePlaceFallback)
+    );
     infoWindow.open({ map, anchor: marker });
 
-    fetchPlaceDetails(location).then((place) => {
+    fetchPlaceDetails(location, detailsFieldsBase, {
+      allowLiveFallback: allowLivePlaceFallback,
+    }).then((place) => {
       if (currentNonce !== infoNonce) {
         return;
       }
@@ -1216,12 +1365,6 @@ const initHeroRatingPlaces = () => {
     return;
   }
 
-  const mapEl = document.getElementById("locations-map");
-  const apiKey = mapEl ? mapEl.dataset.apiKey : "";
-  if (!apiKey) {
-    return;
-  }
-
   const locations = Array.isArray(window.kebabLocations)
     ? window.kebabLocations
     : [];
@@ -1236,9 +1379,8 @@ const initHeroRatingPlaces = () => {
     }
   });
 
-  loadGoogleMapsScript(apiKey)
+  loadPlacesSnapshot()
     .then(() => {
-      ensurePlacesService();
       const updates = [];
 
       cards.forEach((card) => {
@@ -1256,7 +1398,7 @@ const initHeroRatingPlaces = () => {
         }
 
         updates.push(
-          fetchPlaceDetails(location).then((place) => {
+          fetchPlaceDetails(location, detailsFieldsBase).then((place) => {
             if (!place) {
               return;
             }
