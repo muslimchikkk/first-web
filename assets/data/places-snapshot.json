@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-15T13:55:10.445Z",
+  "generatedAt": "2026-02-15T18:53:20.638Z",
   "refreshIntervalDays": 7,
   "locations": [
     {
@@ -81,10 +81,18 @@
         "lng": 14.44019
       },
       "rating": 4.3,
-      "user_ratings_total": 192,
+      "user_ratings_total": 193,
       "formatted_address": "Křižíkova 254/5, 186 00 Praha 8-Florenc, Czechia",
       "formatted_phone_number": "773 002 377",
       "reviews": [
+        {
+          "author_name": "Aleksandar Spasovski",
+          "author_url": "https://www.google.com/maps/contrib/107357157932491625202/reviews",
+          "profile_photo_url": "https://lh3.googleusercontent.com/a/ACg8ocL4YbHAuTu_gLZsCtkL3nN4i9cFafY2sq6AeBR4iUqaG3X9yA=s128-c0x00000000-cc-rp-mo",
+          "rating": 5,
+          "text": "Very very good, 3 days in a row we eat here doner, it was amazing.",
+          "time": 1771169011
+        },
         {
           "author_name": "Johongir Abduvaliyev",
           "author_url": "https://www.google.com/maps/contrib/102495361840110238802/reviews",
@@ -108,14 +116,6 @@
           "rating": 5,
           "text": "Amazing\nGreat place to hang out",
           "time": 1770937609
-        },
-        {
-          "author_name": "Syed Zeeshan",
-          "author_url": "https://www.google.com/maps/contrib/114601253669006917096/reviews",
-          "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjXaFfeHa3ss8jnJ8nk0OfPSZ48EOiTqNwXOB35bXGjt5F1CQHkbBQ=s128-c0x00000000-cc-rp-mo",
-          "rating": 5,
-          "text": "Best kebab in Prague! Fresh, flavorful, and always served with a smile. A must-try if you’re craving authentic taste.\"",
-          "time": 1770547308
         }
       ]
     },
@@ -190,10 +190,18 @@
         "lng": 14.40873
       },
       "rating": 4.5,
-      "user_ratings_total": 427,
+      "user_ratings_total": 428,
       "formatted_address": "Nádražní 279/1, 150 00 Praha 5-Smíchov, Czechia",
       "formatted_phone_number": "737 837 162",
       "reviews": [
+        {
+          "author_name": "Максим",
+          "author_url": "https://www.google.com/maps/contrib/106009536903226784873/reviews",
+          "profile_photo_url": "https://lh3.googleusercontent.com/a/ACg8ocLYE_APnhIbrGVPdH68EAhaLnkPcCnVg7fL99oxm0du-KAjvg=s128-c0x00000000-cc-rp-mo",
+          "rating": 5,
+          "text": "kissed the cook's hands",
+          "time": 1771172578
+        },
         {
           "author_name": "Лук'ян Левінковський",
           "author_url": "https://www.google.com/maps/contrib/114518462518978471114/reviews",
@@ -225,14 +233,6 @@
           "rating": 3,
           "text": "I had a kebab with my girlfriend, fries with sauce and salad. For me, the kebab was pretty good, but the fries with herb sauce were terrible. The fries were cold, the sauce was salty and overall it was rubbery. You can't go wrong with a salad so she liked it. The service was nice but there was nowhere to sit.",
           "time": 1771154992
-        },
-        {
-          "author_name": "A guy a dude",
-          "author_url": "https://www.google.com/maps/contrib/117448277128478424003/reviews",
-          "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjUG-b7AxxI33filbjs1SkObqj1NOkmx7BPDF1_DF2QXN1fExygV=s128-c0x00000000-cc-rp-mo",
-          "rating": 3,
-          "text": "I visit here from time to time. It's my favorite kebab taste wise.\nBut the AI marketing is sure ruining the atmosphere. The TV with that horrible video. It's making me not really want to come back. I see this generated slop as an insult to any craft or employee.\nWho would ever think it adds something to an experience? It actively takes away.",
-          "time": 1769970212
         }
       ]
     },
@@ -307,7 +307,7 @@
         "lng": 14.34443
       },
       "rating": 4.4,
-      "user_ratings_total": 71,
+      "user_ratings_total": 72,
       "formatted_address": "Brunclíkova 1945/28, 162 00 Praha 6-Břevnov, Czechia",
       "formatted_phone_number": "773 345 377",
       "reviews": [
@@ -326,14 +326,6 @@
           "rating": 4,
           "text": "Tasty kebab, slightly above average.",
           "time": 1770726314
-        },
-        {
-          "author_name": "Michal Muzikář",
-          "author_url": "https://www.google.com/maps/contrib/111976454292915681947/reviews",
-          "profile_photo_url": "https://lh3.googleusercontent.com/a/ACg8ocLWtg57-uNK1BUzs2N2rkIEkuJ-MakoipK6phJOt4KQXRDGaw=s128-c0x00000000-cc-rp-mo",
-          "rating": 3,
-          "text": "Čekal jsem na pizzu 40 minut a ještě byla celá spálená (bez chuti). Kebab ale docela ok.",
-          "time": 1769722490
         }
       ]
     },
