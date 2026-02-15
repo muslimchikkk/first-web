@@ -1,6 +1,0 @@
-Ways to reduce cost
-DONE: Load the map only when the user scrolls to it (lazy load).
-
-
-about $7 per 1,000 loads
-With $200/month free, you can get ~28,000 map loads/month for free.
