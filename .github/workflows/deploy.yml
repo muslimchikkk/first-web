@@ -18,7 +18,7 @@ jobs:
           username: ${{ secrets.FORPSI_USER }}
           password: ${{ secrets.FORPSI_PASS }}
           protocol: ftps
-          port: 21
+          port: 22
           server-dir: ${{ secrets.FORPSI_REMOTE_PATH }}
           local-dir: ./
           log-level: verbose
