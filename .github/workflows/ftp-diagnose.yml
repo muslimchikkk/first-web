@@ -1,0 +1,102 @@
+name: FTP Diagnose
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check required secrets exist
+        env:
+          HOST: ${{ secrets.FORPSI_HOST }}
+          USER: ${{ secrets.FORPSI_USER }}
+          PASS: ${{ secrets.FORPSI_PASS }}
+          REMOTE: ${{ secrets.FORPSI_REMOTE_PATH }}
+        run: |
+          missing=0
+          for key in HOST USER PASS REMOTE; do
+            value="${!key}"
+            if [ -z "$value" ]; then
+              echo "Missing required secret value for $key"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+          echo "Secrets are present."
+
+      - name: Diagnose FTP/FTPS connectivity and auth
+        env:
+          HOST: ${{ secrets.FORPSI_HOST }}
+          USER: ${{ secrets.FORPSI_USER }}
+          PASS: ${{ secrets.FORPSI_PASS }}
+          REMOTE: ${{ secrets.FORPSI_REMOTE_PATH }}
+        run: |
+          python - << 'PY'
+          import os
+          import ftplib
+          import socket
+
+          host = os.environ["HOST"].strip()
+          user = os.environ["USER"].strip()
+          pwd = os.environ["PASS"]
+          remote = os.environ.get("REMOTE", "/www/").strip() or "/www/"
+
+          tests = [
+              ("FTP (plain) on 21", "ftp", 21),
+              ("FTPS explicit on 21", "ftps-explicit", 21),
+              ("FTPS implicit on 990", "ftps-implicit", 990),
+          ]
+
+          def try_cwd(client):
+              try:
+                  client.cwd(remote)
+                  print(f"  CWD OK: {remote}")
+              except Exception as err:
+                  print(f"  CWD failed: {type(err).__name__}: {err}")
+
+          for label, mode, port in tests:
+              print(f"\n=== {label} ===")
+              try:
+                  if mode == "ftp":
+                      client = ftplib.FTP()
+                      client.connect(host, port, timeout=20)
+                      client.login(user, pwd)
+                      print("  Login OK")
+                      try_cwd(client)
+                      client.quit()
+                      continue
+
+                  if mode == "ftps-explicit":
+                      client = ftplib.FTP_TLS()
+                      client.connect(host, port, timeout=20)
+                      client.login(user, pwd)
+                      client.prot_p()
+                      print("  Login OK (explicit TLS + PROT P)")
+                      try_cwd(client)
+                      client.quit()
+                      continue
+
+                  # Implicit FTPS requires wrapping the socket before FTP commands.
+                  client = ftplib.FTP_TLS()
+                  raw_sock = socket.create_connection((host, port), timeout=20)
+                  client.sock = client.context.wrap_socket(raw_sock, server_hostname=host)
+                  client.af = client.sock.family
+                  client.file = client.sock.makefile("r", encoding=client.encoding)
+                  client.welcome = client.getresp()
+                  client.login(user, pwd)
+                  client.prot_p()
+                  print("  Login OK (implicit TLS + PROT P)")
+                  try_cwd(client)
+                  client.quit()
+              except Exception as err:
+                  print(f"  FAILED: {type(err).__name__}: {err}")
+          PY
+
+      - name: Next action hints
+        run: |
+          echo "If only one mode logs in successfully, use that protocol/port in deploy.yml."
+          echo "If all modes fail but FileZilla works, ask provider support about IP restrictions or account lockouts."
