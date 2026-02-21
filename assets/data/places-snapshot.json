@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-15T18:53:20.638Z",
+  "generatedAt": "2026-02-16T05:09:09.301Z",
   "refreshIntervalDays": 7,
   "locations": [
     {
@@ -55,20 +55,20 @@
           "time": 1770839193
         },
         {
-          "author_name": "Don's",
-          "author_url": "https://www.google.com/maps/contrib/107161831523978406184/reviews",
-          "profile_photo_url": "https://lh3.googleusercontent.com/a/ACg8ocKohaAM-CC7izNdJ9RKVFeDhNurhLnnhZWNxn01xUBWYfnZFA=s128-c0x00000000-cc-rp-mo",
-          "rating": 5,
-          "text": "😍😍",
-          "time": 1770581508
-        },
-        {
           "author_name": "Jaroslav Kolář",
           "author_url": "https://www.google.com/maps/contrib/109446187029362001160/reviews",
           "profile_photo_url": "https://lh3.googleusercontent.com/a/ACg8ocJNSMs3HLTpwZv-j46xCdNf-4yXIMD9nxjDjn7b9QCeYZf99Q=s128-c0x00000000-cc-rp-mo-ba2",
           "rating": 5,
           "text": "Very nice service and great kebab",
           "time": 1770133766
+        },
+        {
+          "author_name": "Karolína Procházková",
+          "author_url": "https://www.google.com/maps/contrib/102487145559436729406/reviews",
+          "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjXuG6VFGQlS4MQAjdm_WkxT3wJKAZLebWmqRBta7E21vvRDxfM=s128-c0x00000000-cc-rp-mo-ba3",
+          "rating": 5,
+          "text": "Pizza is good. But don't order in the store. I wanted to support them so that more money would stay with them, I ordered by phone directly in the store, but I paid half as much (299 x 199 when ordering in the app + 0 for pickup). Then I don't feel like a loyal customer, but like an idiot.",
+          "time": 1769177174
         }
       ]
     },
@@ -199,7 +199,7 @@
           "author_url": "https://www.google.com/maps/contrib/106009536903226784873/reviews",
           "profile_photo_url": "https://lh3.googleusercontent.com/a/ACg8ocLYE_APnhIbrGVPdH68EAhaLnkPcCnVg7fL99oxm0du-KAjvg=s128-c0x00000000-cc-rp-mo",
           "rating": 5,
-          "text": "kissed the cook's hands",
+          "text": "повару руки целовал",
           "time": 1771172578
         },
         {
@@ -231,7 +231,7 @@
           "author_url": "https://www.google.com/maps/contrib/100593943081780995938/reviews",
           "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjXqEiHZxyCzkR3bi8xK-7TnjX17eTabKtu_8pi8SSb_mMdMpYp-=s128-c0x00000000-cc-rp-mo",
           "rating": 3,
-          "text": "I had a kebab with my girlfriend, fries with sauce and salad. For me, the kebab was pretty good, but the fries with herb sauce were terrible. The fries were cold, the sauce was salty and overall it was rubbery. You can't go wrong with a salad so she liked it. The service was nice but there was nowhere to sit.",
+          "text": "Mel jsem s přítelkyní jeden kebab,hranolky s omáčkou a salát. Za mě kebab dost dobrý,ale hranolky s bylinkovou omáčkou otřesný.Hranolky byly studený,omáčka slaná a celkově to bylo gumový. Na salátu se nedá nic zkazit pomalu takže jí chutnal. Obsluha byla milá ale nedalo si kde sednout.",
           "time": 1771154992
         }
       ]
@@ -326,6 +326,14 @@
           "rating": 4,
           "text": "Tasty kebab, slightly above average.",
           "time": 1770726314
+        },
+        {
+          "author_name": "Radim Bílý",
+          "author_url": "https://www.google.com/maps/contrib/105946786386622976581/reviews",
+          "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjUld8-U9JSeN8MC9XamSAJwt9z-rlz3m44jNE5P-h12O5VhfHY=s128-c0x00000000-cc-rp-mo-ba2",
+          "rating": 5,
+          "text": "Very nice kebab and pizza, great staff.",
+          "time": 1769631156
         }
       ]
     },
