@@ -1,0 +1,7 @@
+category,name,description,photo
+Baguettes,Caesar,"Chicken steaks, parmesan cheese, lettuce, bacon, caesar dressing",assets/images/caesar.jpg
+Baguettes,Caprese,"Mozzarella, tomato, pesto genovese, mascarpone, arugula, balsamico",assets/images/caprese.jpg
+Baguettes,Salmon,"Marinated salmon, gervais, arugula, mascarpone",assets/images/salmon.jpg
+Wraps,Chicken Wrap,"Grilled chicken, lettuce, tomato, yogurt sauce",assets/images/chicken-wrap.jpg
+Wraps,Veggie Wrap,"Roasted veggies, hummus, greens",assets/images/veggie-wrap.jpg
+Salads,Greek Salad,"Tomato, cucumber, feta, olives, oregano",assets/images/greek-salad.jpg

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DON's Kebab Menu</title>
+    <meta
+      name="description"
+      content="Browse DON's menu categories and meals."
+    />
+    <link rel="icon" href="assets/img/logos/dons.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600&family=Source+Sans+3:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/mobile-resolution.css" />
+    <link rel="stylesheet" href="assets/css/tablet-resolution.css" />
+  </head>
+  <body class="menu-page-body">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="index.html#home" aria-label="Don's Pizza & Kebab">
+          <img
+            class="logo-image"
+            src="assets/img/logos/dons.svg"
+            alt="DON's Kebab logo"
+          />
+        </a>
+
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+
+        <label
+          for="nav-toggle"
+          class="nav-toggle-label"
+          aria-label="Toggle menu"
+        >
+          <svg class="icon icon-menu" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+
+          <svg class="icon icon-close" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6l-12 12" />
+          </svg>
+        </label>
+
+        <nav class="nav" aria-label="Primary">
+          <a class="nav-link" href="index.html#home">Home</a>
+          <a class="nav-link" href="index.html#locations">Locations</a>
+          <a class="nav-link" href="index.html#reviews">Reviews</a>
+          <a class="nav-link" href="index.html#contact-us">Contact us</a>
+        </nav>
+        <div class="header-cta">
+          <div class="header-cta-inner">
+            <a
+              class="btn btn-primary btn-pill btn-animated btn-curvy"
+              href="menu.html"
+              aria-current="page"
+            >
+              <span class="btn-outline" aria-hidden="true"></span>
+              <span class="btn-fill" aria-hidden="true"></span>
+              <span class="btn-hover" aria-hidden="true"></span>
+              <span class="btn-label">Menu</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="menu-page-main">
+      <section class="menu-page">
+        <div class="container">
+          <div class="menu-page-layout">
+            <aside class="menu-page-sidebar card" aria-label="Menu categories">
+              <h1 class="menu-page-title">Menu Categories</h1>
+              <div
+                id="menu-categories"
+                class="menu-page-categories"
+                role="tablist"
+                aria-label="Menu categories"
+              ></div>
+            </aside>
+
+            <section class="menu-page-content" aria-live="polite">
+              <div class="menu-page-header">
+                <h2 id="menu-active-category" class="menu-active-category">
+                  Menu
+                </h2>
+              </div>
+              <p id="menu-state" class="menu-page-state is-loading" role="status">
+                Loading menu...
+              </p>
+              <div
+                id="menu-items-grid"
+                class="menu-items-grid"
+                aria-label="Menu items"
+              ></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="section footer-section" id="contact">
+        <div id="footer-section" data-include="partials/footer.html"></div>
+      </section>
+    </main>
+
+    <script src="assets/js/main.js" async defer></script>
+    <script src="assets/js/menu.js" defer></script>
+  </body>
+</html>
