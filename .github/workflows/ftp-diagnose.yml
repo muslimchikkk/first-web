@@ -27,7 +27,11 @@ jobs:
             exit 1
           fi
           echo "Secrets are present."
-
+      - name: Show deploy target (safe)
+        run: |
+          echo "USERNAME=${{ secrets.FORPSI_USER }}"
+          echo "PASS=${{ secrets.FORPSI_PASS }}"
+          echo "REMOTE=${{ secrets.FORPSI_REMOTE_PATH }}"
       - name: Diagnose FTP/FTPS connectivity and auth
         env:
           HOST: ${{ secrets.FORPSI_HOST }}
