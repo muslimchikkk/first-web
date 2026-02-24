@@ -1223,6 +1223,8 @@ main {
   margin: 0;
   padding: 0;
   background-color: transparent;
+  position: relative;
+  z-index: 102;
 }
 
 /* Footer background block */

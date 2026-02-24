@@ -264,8 +264,81 @@ const initCsvMenuPage = () => {
   app.init();
 };
 
+const initSidebarToggle = () => {
+  const sidebar = document.getElementById("menu-sidebar");
+  const toggleBtn = document.getElementById("menu-sidebar-toggle");
+
+  if (!sidebar || !toggleBtn) return;
+
+  // Create backdrop overlay
+  const backdrop = document.createElement("div");
+  backdrop.className = "menu-sidebar-backdrop";
+  backdrop.style.display = "none";
+  backdrop.style.zIndex = "-1";
+
+  document.body.appendChild(backdrop);
+
+  const openSidebar = () => {
+    sidebar.classList.add("is-expanded");
+    backdrop.style.display = "block";
+    toggleBtn.setAttribute("aria-expanded", "true");
+  };
+
+  const closeSidebar = () => {
+    sidebar.classList.remove("is-expanded");
+    backdrop.style.display = "none";
+    toggleBtn.setAttribute("aria-expanded", "false");
+  };
+
+  toggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (sidebar.classList.contains("is-expanded")) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+
+  // Close on backdrop click
+  backdrop.addEventListener("click", closeSidebar);
+
+  // Close when clicking outside the sidebar (on the content area)
+  document.addEventListener("click", (e) => {
+    if (sidebar.classList.contains("is-expanded")) {
+      if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+        closeSidebar();
+      }
+    }
+  });
+
+  // Close when a category is selected
+  const updateCategoryListeners = () => {
+    const categories = document.querySelectorAll(".menu-category-btn");
+    categories.forEach((btn) => {
+      btn.removeEventListener("click", closeSidebar);
+      btn.addEventListener("click", closeSidebar);
+    });
+  };
+
+  updateCategoryListeners();
+
+  // Watch for new category buttons added dynamically
+  const observer = new MutationObserver(() => {
+    updateCategoryListeners();
+  });
+
+  const categoriesContainer = document.getElementById("menu-categories");
+  if (categoriesContainer) {
+    observer.observe(categoriesContainer, { childList: true });
+  }
+};
+
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initCsvMenuPage);
+  document.addEventListener("DOMContentLoaded", () => {
+    initCsvMenuPage();
+    initSidebarToggle();
+  });
 } else {
   initCsvMenuPage();
+  initSidebarToggle();
 }

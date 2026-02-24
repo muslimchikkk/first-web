@@ -78,8 +78,15 @@
       <section class="menu-page">
         <div class="menu-container">
           <div class="menu-page-layout">
-            <aside class="menu-page-sidebar card" aria-label="Menu categories">
-              <h1 class="menu-page-title">Menu Categories</h1>
+            <button class="menu-sidebar-toggle-mobile" id="menu-sidebar-toggle" aria-label="Toggle menu categories" aria-expanded="false" aria-controls="menu-categories">
+                  <svg class="menu-sidebar-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 6h18M3 12h18M3 18h18" />
+                  </svg>
+                </button>
+            <aside class="menu-page-sidebar card" id="menu-sidebar" aria-label="Menu categories">
+              <div class="menu-sidebar-header">
+                <h1 class="menu-page-title">Menu Categories</h1>
+              </div>
               <hr class="menu-devider"/>
               <div
                 id="menu-categories"
